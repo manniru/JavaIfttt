@@ -68,9 +68,9 @@ public class WeiboChannel extends Channel{
 	}
 	
 	public Status getStatusByName(String weiboUserScreenName) {
-		System.setProperty("weibo4j.oauth.consumerKey", "1537675140");
+		System.setProperty("weibo4j.oauth.consumerKey", "*");
 		System.setProperty("weibo4j.oauth.consumerSecret",
-				"09ca02e06f8f2f5aedc22ec8b7117f22");
+				"*");
 		Weibo weibo = new Weibo();
 		AccessToken accessToken = getToken(weibo);
 		User weibouser = null;
@@ -86,9 +86,9 @@ public class WeiboChannel extends Channel{
 	}
 	
 	public java.util.List<Status> getStatusById(String weiboUserId) {
-		System.setProperty("weibo4j.oauth.consumerKey", "1537675140");
+		System.setProperty("weibo4j.oauth.consumerKey", "*");
 		System.setProperty("weibo4j.oauth.consumerSecret",
-				"09ca02e06f8f2f5aedc22ec8b7117f22");
+				"*");
 		Weibo weibo = new Weibo();
 		AccessToken accessToken = getToken(weibo);
 		weibo.setToken(accessToken.getToken(), accessToken.getTokenSecret());
@@ -117,9 +117,9 @@ public class WeiboChannel extends Channel{
 	
 	public void update(CommonContent content) {
 		/**update the status with content*/
-		System.setProperty("weibo4j.oauth.consumerKey", "1537675140");
+		System.setProperty("weibo4j.oauth.consumerKey", "*");
 		System.setProperty("weibo4j.oauth.consumerSecret",
-				"09ca02e06f8f2f5aedc22ec8b7117f22");
+				"*");
 		Weibo weibo = new Weibo();
 		AccessToken accessToken = getToken(weibo); 
 		try {

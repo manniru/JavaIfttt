@@ -1,0 +1,92 @@
+<!DOCTYPE html> 
+<html> 
+  	<head> 
+    	<meta charset='utf-8'> 
+    	<meta http-equiv="X-UA-Compatible" content="chrome=1"> 
+        	<title>Log in - ifttt</title> 
+     		<link href="./stylesheet/login.css" media="screen" rel="stylesheet" type="text/css" /> 
+   			<script src="" type="text/javascript"></script>     
+ 	</head> 
+ 	<body class="logged_out  windows  env-production "> 
+       	<div id="header" class="true clearfix"> 
+        	<div class="container" class="clearfix"> 
+          		<a class="logo" href="./index.html"> 
+            		<img height="46" width="96" alt="ifttt" src="./pic/logo.png"> 
+          		</a> 
+    			<ul class="top-nav logged_out"> 
+        			<li class="signup"><a href="./sup.html">Signup</a></li> 
+       				<li class="explore"><a href="/explore">Explore ifttt</a></li> 
+      				<li class="features"><a href="/features">Features</a></li> 
+      				<li class="login"><a href="./login.html">Login</a></li> 
+    			</ul> 
+        	</div> 
+      	</div> <!-- /.header -->
+ 
+        <div class="site"> 
+          	<div class="container"> 
+           		<div id="login" class="login_form"> 
+					<form action="/session" method="post">
+						<div style="margin:0;padding:0;display:inline">
+							<input name="authenticity_token" type="hidden" value="73imX3JwxhlFbXI6dxqRD60ggmM9loj3uuQjTh2fZLk=" />
+						</div>      
+						<h1> 
+       	 					Log in
+         	 				<a href="./sup.html">(Signup)</a> 
+      					</h1> 
+    					<div class="formbody">    
+        					<label for="login"> 
+         			 			Login or Email<br /> 
+          						<input autocapitalize="off" class="text" id="login_field" name="login" style="width: 21em;" tabindex="1" type="text" /> 
+        					</label> 
+ 
+        					<label for="password"> 
+          						Password <a href="/sessions/forgot_password">(forgot password)</a> 
+          						<br /> 
+          						<input autocomplete="disabled" class="text" id="password" name="password" style="width: 21em;" tabindex="2" type="password" value="" /> 
+        					</label> 
+ 
+        					<label class='submit_btn'> 
+                             	 <input name="commit" tabindex="3" type="submit" value="Log in" /> 
+        					</label> 
+    					</div> 
+					</form>
+				</div> <!-- login -->
+			</div> <!-- ./container -->
+    	</div> <!-- ./site -->
+    	
+    	<!-- footer --> 
+    	<div id="footer" > 
+      		<div class="upper_footer"> 
+     			<div class="container" class="clearfix"> 
+       				<!--[if IE]><h4 id="blacktocat_ie">GitHub Links</h4><![endif]--> 
+       				<![if !IE]><h4 id="blacktocat">ifttt Links</h4><![endif]> 
+      					<ul class="footer_nav"> 
+         					<h4>ifttt</h4> 
+         					<li><a href="/about">About</a></li> 
+         					<li><a href="/features">Features</a></li> 
+         					<li><a href="/contact">Contact &amp; Support</a></li> 
+         					<li><a href="/training">Training</a></li> 
+       					</ul> 
+ 
+ 
+       					<ul class="footer_nav"> 
+         					<h4>Documentation</h4> 
+         					<li><a href="/help">ifttt Help</a></li> 
+         					<li><a href="/developer">Developer</a></li> 
+       					</ul>     
+     			</div><!-- /.site --> 
+  			</div><!-- /.upper_footer --> 
+  			<div class="rule"></div>
+			<div class="lower_footer">
+  				<div class="container">
+    				<div align = "center" id="legal">
+     			 		<ul>
+          					<a href="./privacy.html">Privacy</a>  
+      					</ul>
+      					<p>© 2011 <span id="_rrt">TWW</span> All rights reserved.</p>
+   	 				</div>
+  			 	</div>
+			</div><!-- ./lower_footer -->
+    	</div><!-- /#footer --> 
+  	</body> 
+</html> 

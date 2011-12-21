@@ -9,7 +9,7 @@ public class Server {
 	}
 	public static boolean RegisterUser(SimpleUser user) {
 		// TODO Auto-generated method stub
-		UserManager.getInstance().createUser(user.getUsername(), user.getPassword(), user.getMail());
+		//UserManager.getInstance().createUser(user.getUsername(), user.getPassword(), user.getMail());
 		return true;
 	}
 	public static boolean CreateTask(String taskDescription) {

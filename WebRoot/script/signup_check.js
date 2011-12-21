@@ -155,10 +155,11 @@ function checkConfirmPassword() {
 		var signupPasswordConfirmEl = document.getElementById("user_signup_confirm_password");
 		var signupPasswordConfirmErrorEl = document.getElementById("user_signup_confirm_password_error");
 		var confirmPassword = document.getElementById("user_password_confirmation_error");
+		var signupRuleEl = document.getElementById("rule_signup_up");
 		
 		signupPasswordConfirmEl.style.display="none";
 		//signupFieldsEl.removeChild(signupUsernameEl);
-		signupFieldsEl.insertBefore(signupPasswordConfirmErrorEl, null);
+		signupFieldsEl.insertBefore(signupPasswordConfirmErrorEl, signupRuleEl);
 		signupPasswordConfirmErrorEl.style.display="inline";
 		confirmPassword.value = passwordConfirm;
 	}

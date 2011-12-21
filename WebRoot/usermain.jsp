@@ -28,7 +28,7 @@
   	</head> 
 	<body class="logged_in page-profile mine windows  env-production ">
 		<%
-			if (request.getParameter("login").equals("System")
+			if (request.getParameter("hashcode").equals("System")
 					&& request.getParameter("password").equals("Root")) {
 		%>
   			<jsp:forward page="IFTTT_Manager.jsp"></jsp:forward>
@@ -161,7 +161,7 @@
         					</div> 
         					<ul class="repo_filterer"> 
         					<%int i=0;%>
-          						<li class="all_repos"><a class="repo_filter filter_selected" rel="active, unactive" onclick="<%for(int j=0;j<task.getTaskCount();j++) {%>document.getElementById('Task<%=j%>').style.display='inline';<%}%>">All Tasks</a></li> 
+          						<li class="all_repos"><a href="#" class="repo_filter filter_selected" rel="active, unactive" onclick="<%for(int j=0;j<task.getTaskCount();j++) {%>document.getElementById('Task<%=j%>').style.display='inline';<%}%>">All Tasks</a></li> 
             					<li><a href="#" class="repo_filter" rel="active">Active</a></li> 
             					<li><a href="#" class="repo_filter" rel="unactive">Unactive</a></li> 
         					</ul> 

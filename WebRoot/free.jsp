@@ -110,12 +110,9 @@
   							</h2> 
   							<div class="fieldgroup"> 
     							<div class="fields" id="user_signup_fields"> 
-      								<dl class="form autocheck" id="user_signup_userid" style="display:inline"> 
-    									<dt><label autocapitalize="off" check-url="/signup_check/username" error="false" for="user_login" name="user[login]">UserId</label></dt> 
+    								<dl class="form autocheck" id="user_signup_username" style="display:inline"> 
+    									<dt><label autocapitalize="off" check-url="/signup_check/username" error="false" for="user_login" name="user[login]">Username</label></dt> 
     									<dd><input autocapitalize="off" check-url="/signup_check/username" error="false" id="user_login" name="user[login]" size="30" type="text" onChange="checkUsername()" /></dd></dl> 
-    								<dl class="form autocheck" id="user_signup_username""> 
-    									<dt><label autocapitalize="off" error="false" for="user_login" name="user[name]">Username</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_name" name="user[name]" size="30" type="text" /></dd></dl>
       								<dl class="form autocheck" id="user_signup_email"> 
     									<dt><label autocapitalize="off" check-url="/signup_check/email" for="user_email" hint="We promise we won't share your email with anyone." name="user[email]">Email Address</label></dt> 
     									<dd><input autocapitalize="off" check-url="/signup_check/email" hint="We promise we won't share your email with anyone." id="user_email" name="user[email]" size="30" type="text" onChange="checkEmail()"/><p class="note">We promise we won't share your email with anyone.</p></dd></dl> 
@@ -125,20 +122,12 @@
     									<dd><input check-url="/signup_check/password" error="false" hint="Must contain one lowercase letter, one number, and be at least 7 characters long" id="user_password" name="user[password]" size="30" type="password" onChange="checkPassword()"/><p class="note">Must contain one lowercase letter, one number, and be at least 7 characters long</p></dd></dl>  
       								<dl class="form" id="user_signup_confirm_password"> 
     									<dt><label error="false" for="user_password_confirmation">Confirm Password</label></dt> 
-    									<dd><input error="false" id="user_password_confirmation" name="user[password_confirmation]" size="30" type="password" onChange="checkConfirmPassword()" /></dd></dl>
-    								<dl class="form autocheck" id="user_signup_realname""> 
-    									<dt><label autocapitalize="off" error="false" for="user_realname" name="user[realname]">Realname</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_realname" name="user[realname]" size="30" type="text" /></dd></dl>
-    								<dl class="form autocheck" id="user_signup_city""> 
-    									<dt><label autocapitalize="off" error="false" for="user_city" name="user[city]">City</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_city" name="user[city]" size="30" type="text" /></dd></dl>
-    								<dl class="form autocheck" id="user_signup_birthday""> 
-    									<dt><label autocapitalize="off" error="false" for="user_birthday" name="user[birthday]">Birthday</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_birthday" name="user[birthday]" size="30" type="text"/></dd></dl>
-    								<dl class="form autocheck" id="user_signup_phonenumer""> 
-    									<dt><label autocapitalize="off" error="false" for="user_phonenumer" name="user[phonenumer]">PhoneNumber</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_phonenumer" name="user[phonenumer]" size="30" type="text" /></dd></dl>
-    							</div> 
+    									<dd><input error="false" id="user_password_confirmation" name="user[password_confirmation]" size="30" type="password" onChange="checkConfirmPassword()" /></dd></dl> 	
+    								<div class="rule" id="rule_signup_up"></div>
+    								<dl class="form autocheck" id="user_signup_screenname" style="display:inline"> 
+    									<dt><label autocapitalize="off" error="false" for="user_login" name="user[login]">Nickname</label></dt> 
+    									<dd><input autocapitalize="off"  error="false" id="user_login" name="user[login]" size="30" type="text" /></dd></dl>
+    							</div> 			
   							</div>  
   							<input id="user_plan" name="user[plan]" type="hidden" value="free" /> 
   							<input id="org_plan" name="org_plan" type="hidden" /> 
@@ -205,16 +194,16 @@
      			 		<ul>
           					<a href="./privacy.html">Privacy</a>  
       					</ul>
-      					<p>Â© 2011 <span id="_rrt">TWW</span> All rights reserved.</p>
+      					<p>© 2011 <span id="_rrt">TWW</span> All rights reserved.</p>
    	 				</div>
   			 	</div>
   			 	<dl class="form autocheck error" style="display:none" id="user_signup_username_error">
     				<dt><label autocapitalize="off" check-url="/signup_check/username" error="false" for="user_login" name="user[login]">Username</label></dt>
-    				<dd><input autocapitalize="off" check-url="/signup_check/username" error="false" id="user_login_error" name="user[login]" size="30" type="text" style="background-image: url(https://github.com/images/modules/ajax/error.png); " onChange="checkUsernameError()"></dd><dd class="error">Username is a reserved word, is already taken.</dd></dl>
+    				<dd><input autocapitalize="off" check-url="/signup_check/username" error="false" id="user_login_error" name="user[login]" size="30" type="text" style="background-image: url(./pic/error.png); " onChange="checkUsernameError()"></dd><dd class="error">Username is a reserved word, is already taken.</dd></dl>
       			
       			<dl class="form autocheck error" id="user_signup_email_error" style="display:none">
     				<dt><label autocapitalize="off" check-url="/signup_check/email" for="user_email" hint="We promise we won't share your email with anyone." name="user[email]">Email Address</label></dt>
-    				<dd><input autocapitalize="off" check-url="/signup_check/email" hint="We promise we won't share your email with anyone." id="user_email_error" name="user[email]" size="30" type="text" style="background-image: url(https://github.com/images/modules/ajax/error.png); " onChange="checkEmailError()"><p class="note" style="display: none; ">We promise we won't share your email with anyone.</p></dd><dd class="error">Email is invalid or already taken</dd></dl> 
+    				<dd><input autocapitalize="off" check-url="/signup_check/email" hint="We promise we won't share your email with anyone." id="user_email_error" name="user[email]" size="30" type="text" style="background-image: url(./pic/error.png); " onChange="checkEmailError()"><p class="note" style="display: none; ">We promise we won't share your email with anyone.</p></dd><dd class="error">Email is invalid or already taken</dd></dl> 
       			<dl class="form autocheck error" id="user_signup_password_error" style="display:none"> 
     				<dt><label check-url="/signup_check/password" error="false" for="user_password" hint="Must contain one lowercase letter, one number, and be at least 7 characters long" name="user[password]">Password</label></dt> 
     				<dd><input check-url="/signup_check/password" error="false" hint="Must contain one lowercase letter, one number, and be at least 7 characters long" id="user_password" name="user[password]" size="30" type="password" /><p class="note">Must contain one lowercase letter, one number, and be at least 7 characters long</p></dd></dl>  

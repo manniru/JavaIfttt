@@ -41,6 +41,20 @@
     <servlet-name>CurrentUsersServlet</servlet-name>
     <servlet-class>org.joe.ifttt.server.servlet.CurrentUsersServlet</servlet-class>
   </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>UsernameCheck</servlet-name>
+    <servlet-class>org.joe.ifttt.server.servlet.UsernameCheck</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>EmailCheck</servlet-name>
+    <servlet-class>org.joe.ifttt.server.servlet.EmailCheck</servlet-class>
+  </servlet>
+
+
 
 
 
@@ -70,6 +84,14 @@
   <servlet-mapping>
     <servlet-name>CurrentUsersServlet</servlet-name>
     <url-pattern>/servlet/CurrentUsersServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UsernameCheck</servlet-name>
+    <url-pattern>/servlet/UsernameCheck</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>EmailCheck</servlet-name>
+    <url-pattern>/servlet/EmailCheck</url-pattern>
   </servlet-mapping>	
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

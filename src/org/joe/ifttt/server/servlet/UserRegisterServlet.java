@@ -95,7 +95,7 @@ public class UserRegisterServlet extends HttpServlet {
 
 	private void storeUser(SimpleUser user) {
 		// TODO Auto-generated method stub
-		UserManager.getInstance().createUser(user.getUsername(), user.getPassword(), user.getMail());
+		//UserManager.getInstance().createUser(user.getUsername(), user.getPassword(), user.getMail());
 	}
 
 	/**

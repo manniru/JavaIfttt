@@ -125,8 +125,8 @@
     									<dd><input error="false" id="user_password_confirmation" name="user[password_confirmation]" size="30" type="password" onChange="checkConfirmPassword()" /></dd></dl> 	
     								<div class="rule" id="rule_signup_up"></div>
     								<dl class="form autocheck" id="user_signup_screenname" style="display:inline"> 
-    									<dt><label autocapitalize="off" error="false" for="user_login" name="user[login]">Nickname</label></dt> 
-    									<dd><input autocapitalize="off"  error="false" id="user_login" name="user[login]" size="30" type="text" /></dd></dl>
+    									<dt><label autocapitalize="off" error="false" for="user_login" name="user[name]">Nickname</label></dt> 
+    									<dd><input autocapitalize="off"  error="false" id="user_login" name="user[name]" size="30" type="text" /></dd></dl>
     							</div> 			
   							</div>  
   							<input id="user_plan" name="user[plan]" type="hidden" value="free" /> 

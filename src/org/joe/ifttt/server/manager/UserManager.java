@@ -120,7 +120,31 @@ public class UserManager {
 	}
 	
 	public CommonUser getLoginUserByHashcode(long userHash) {
+		/**get the info of the login user, return a CommonUser entry*/
 		return loginUsers.get(userHash);
+	}
+	
+	public String[] getLoginUserByHashcodeString(long userHash) {
+		/**get the info of the login user, return a string array*/
+		CommonUser currentUser = loginUsers.get(userHash);
+		String[] info= new String[3];
+		info[0] = currentUser.getUsername();
+		info[1] = currentUser.getScreenName();
+		info[2] = currentUser.getMailAddres();
+		return info;
+	}
+	
+	public boolean modifyUserByHashcode(long userHash, String screenname, String email) {
+		/**modify the info of the login user, */
+		if (loginUsers.get(userHash) == null) {
+			return false;
+		}
+		String username = loginUsers.get(userHash).getUsername();
+		CommonUser currentUser = DataManager.getInstance().getUserTest(username);
+		currentUser.setScreenName(screenname);
+		currentUser.setMailAddres(email);
+		
+		return true;
 	}
 	public CommonUser getUserByUsername(String username) {
 		/**get User by Username*/

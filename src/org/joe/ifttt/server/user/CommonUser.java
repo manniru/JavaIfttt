@@ -21,7 +21,7 @@ public class CommonUser {
 	private final int MAX_CHANNEL = 10; 
 	private String 		username;
 	private String 		password;
-	private String		mailAddres;
+	private String		mailAddress;
 	private long		score;
 	private UserLevel	userLevel;
 	private UserState	userState; 
@@ -33,13 +33,13 @@ public class CommonUser {
 	public CommonUser(String username, String password, String mail) {
 		this.username = username;
 		this.password = password;
-		this.mailAddres = mail;
+		this.mailAddress = mail;
 	}
 	public CommonUser(String un, String psw, String maddr, 
 			long sc, UserLevel ul, UserState us) {
 		this.username = un;
 		this.password = psw;
-		this.mailAddres = maddr;
+		this.mailAddress = maddr;
 		this.score = sc;
 		this.userLevel = ul;
 		this.userState = us;
@@ -51,7 +51,7 @@ public class CommonUser {
 		this.username = un;
 		this.password = psw;
 		this.screenName = sn;
-		this.mailAddres = maddr;
+		this.mailAddress = maddr;
 		this.score = sc;
 		this.userLevel = ul;
 		this.userState = us;
@@ -61,7 +61,7 @@ public class CommonUser {
 	public String toString() {
 		/***to get the basic info of the user*/
 		String string;
-		string = "USER|USERNAME:" + username + "|EMAIL:" + mailAddres + 
+		string = "USER|USERNAME:" + username + "|EMAIL:" + mailAddress + 
 		"|SCORE:" + score + "|LEVEL:" + userLevel + "|STATE:" + userState + "\n";
 		return string;
 	}
@@ -86,10 +86,10 @@ public class CommonUser {
 		return password;
 	}
 	public void setMailAddres(String mailAddres) {
-		this.mailAddres = mailAddres;
+		this.mailAddress = mailAddres;
 	}
 	public String getMailAddres() {
-		return mailAddres;
+		return mailAddress;
 	}
 	public void setScore(long score) {
 		this.score = score;

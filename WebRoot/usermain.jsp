@@ -6,7 +6,7 @@
 			+ path + "/";
 %>
 
-<%@ page import="org.wzz.ifttt.response.Member.*"%>
+<%@ page import="org.wzz.ifttt.response.Member.Login, org.wzz.ifttt.response.Member.Task"%>
 <!DOCTYPE html> 
 <html> 
   	<head> 
@@ -21,20 +21,19 @@
     	<meta http-equiv="X-UA-Compatible" content="chrome=1">
         <title>admin's Profile - ifttt</title> 
 
-   		<link href="./stylesheet/login.css" media="screen" rel="stylesheet" type="text/css" /> 
+   		<link href="./stylesheet/index.css" media="screen" rel="stylesheet" type="text/css" /> 
    		<script src="" type="text/javascript"></script> 
      
   		<link href="/mzd.atom" rel="alternate" title="atom" type="application/atom+xml" />  
   	</head> 
 	<body class="logged_in page-profile mine windows  env-production ">
 		<%
-			if (request.getParameter("hashcode").equals("System")
+			if (request.getParameter("login").equals("System")
 					&& request.getParameter("password").equals("Root")) {
 		%>
   			<jsp:forward page="IFTTT_Manager.jsp"></jsp:forward>
   		<%
   			}
-  			long hashcode = Long.parseLong(request.getParameter("hashcode"));
   			Login login = new Login();
   			login.setMemberId(request.getParameter("login"));
   			login.setPassword(request.getParameter("password"));
@@ -48,15 +47,10 @@
   		
   		<%
    		  			Task task = new Task();
-   		  			//Message message = new Message();
    		  			task.setMemberId(login.getMemberId());
    		  			task.setTaskCount();
-   		  			//task.getMemberTask();
-   		  			//message.setMemberId(login.getMemberId());
-   		  			//message.setMessageCount();
+   		  			task.getMemberTask(login.getLoginHash());
    		  		%>
-  		
-  		
 	    <div id="header" class="true clearfix"> 
         	<div class="container" class="clearfix"> 
           		<a class="logo" href="./ifttt"> 
@@ -90,7 +84,7 @@
     				<ul id="user-links"> 
       					<li> 
         					<a href="/inbox/notifications" id="notifications" class="tooltipped downwards" title="Notifications"> 
-          						<span class="icon">Notifications</span> 
+          						<!-- need a message function, to show number of messages -->
         					</a> 
       					</li> 
       					<li><a href="/account" id="settings" class="tooltipped downwards" title="Account Settings"><span class="icon">Account Settings</span></a></li> 
@@ -114,7 +108,7 @@
   					</h1> 
   					<ul class="pagehead-actions"> 
         				<li class="text">This is you!</li> 
-        				<li><a href="/account" class="minibutton btn-editprofile"><span>Edit Your Profile</span></a></li> 
+        				<li><a href="ModifyData.jsp?usertemp=<%=login.getMemberId() %>" class="minibutton btn-editprofile"><span>Edit Your Profile</span></a></li> 
   					</ul> 
   					
   					<div class="rule"></div> 
@@ -125,7 +119,9 @@
     				<div class="first vcard"> 
       					<dl><dt>Name</dt><dd class="fn"><%=login.getUserName()%></dd></dl> 
 
-      					<dl><dt>Member Since</dt><dd>Oct 08, 2010</dd></dl> 
+      					<dl><dt>Member Since</dt><dd>Oct 08, 2010</dd></dl>
+      					<dl><dt>Level</dt><dd class="fn"><%=login.getLevel(login.getMemberId())%></dd></dl>
+      					<dl><dt>Integral</dt><dd class="fn"><%=login.getIntegral(login.getLoginHash())%></dd></dl> 
     				</div><!-- /.first --> 
     				<div class="last"> 
       					<ul class="stats"> 
@@ -161,16 +157,15 @@
         					</div> 
         					<ul class="repo_filterer"> 
         					<%int i=0;%>
-          						<li class="all_repos"><a href="#" class="repo_filter filter_selected" rel="active, unactive" onclick="<%for(int j=0;j<task.getTaskCount();j++) {%>document.getElementById('Task<%=j%>').style.display='inline';<%}%>">All Tasks</a></li> 
+          						<li class="all_repos"><a class="repo_filter filter_selected" rel="active, unactive" onclick="<%for(int j=0;j<task.getTaskCount();j++) {%>document.getElementById('Task<%=j%>').style.display='inline';document.getElementById('control_button').style.display='inline';<%}%>">All Tasks</a></li> 
             					<li><a href="#" class="repo_filter" rel="active">Active</a></li> 
             					<li><a href="#" class="repo_filter" rel="unactive">Unactive</a></li> 
         					</ul> 
-      					</div> 
+      					</div>
       					<%
        						while(i<task.getTaskCount()) {
        					%>
-						<ul id="Task<%=i%>" class="repositories repo_list"
-							style="display: none">
+						<ul id="Task<%=i%>" class="repositories repo_list" style="display: none">
 							<li class="public source">
 								<ul class="repo-stats">
 									<li><%=task.getTaskId(i)%>
@@ -178,9 +173,8 @@
 										<%=task.getThatId(i)%>
 										<%=task.gettime(i)%></li>
 								</ul>
-
 								<h3>
-									<a>Test Task</a>
+									<a>Test Task<%=i %></a>
 								</h3>
 								<div class="body">
 									<p class="description">
@@ -195,6 +189,8 @@
 											December 18, 2011
 										</time>
 									</p>
+									<p class="description">
+									</p>
 
 									<div class="participation-graph disabled">
 										<canvas class="bars"
@@ -204,14 +200,21 @@
 											src="https://a248.e.akamai.net/assets.github.com/images/modules/dashboard/dossier/participation_legend.png?1284681402" />
 									</div>
 								</div>
+								<a href="Modify.jsp?taskid=<%=task.getTaskId(i) %>&thisid=<%=task.getThisId(i) %>&thatid=<%=task.getThatId(i) %>&time=<%=task.gettime(i) %>&ifrun=<%=task.getIfRun(i) %>"><button type="submit" class="classy primary js-oneclick" id="modify_button<%=i %>"><span>Modify</span></button></a>
+								<a href="Run.jsp?taskid=<%=task.getTaskId(i) %>&thisid=<%=task.getThisId(i) %>&thatid=<%=task.getThatId(i) %>&time=<%=task.gettime(i) %>&ifrun=<%=task.getIfRun(i) %>"><button type="submit" class="classy primary js-oneclick" id="run_button<%=i %>"><span>Run</span></button></a>
+								<a href="Stop.jsp?taskid=<%=task.getTaskId(i) %>&thisid=<%=task.getThisId(i) %>&thatid=<%=task.getThatId(i) %>&time=<%=task.gettime(i) %>&ifrun=<%=task.getIfRun(i) %>"><button type="submit" class="classy primary js-oneclick" id="stop_button<%=i %>"><span>Stop</span></button></a>
+								<a href="DeleteTask.jsp?taskid=<%=task.getTaskId(i) %>&thisid=<%=task.getThisId(i) %>&thatid=<%=task.getThatId(i) %>&time=<%=task.gettime(i) %>&ifrun=<%=task.getIfRun(i) %>"><button type="submit" class="classy primary js-oneclick" id="delete_button<%=i %>"><span>Delete</span></button></a>
 								<!-- /.body -->
 							</li>
-
+						
 						</ul>
 						<%
 							i++;
 							}
 						%>
+						<div id="control_button" style="display:none">
+						</div>
+						</form>
     				</div><!-- /.first --> 
     				<div class="last"> 
       					<h2>Public Activity <a href="/mzd.atom"><img alt="feed" src="https://a248.e.akamai.net/assets.github.com/images/icons/feed.png?1284681402" /></a></h2> 

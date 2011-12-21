@@ -10,8 +10,10 @@ package org.joe.ifttt.server.manager;
  * implement the operations of tasks
  * process all requests about task 
  */
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import org.joe.ifttt.server.task.*;
 import org.joe.ifttt.server.task.action.That;
@@ -91,11 +93,43 @@ public class TaskManager {
 			newTask.setTaskType(eType + "|" + aType);
 			newTask.setOwner(currentUser.getUsername());
 			newTask.setRepeat(repeat);
+			newTask.setCreateTime((new Date()).toGMTString());
 			tasks.put(currentTaskNum, newTask);
+			UserManager.getInstance().getLoginUserByHashcode(userHash).getUserTask().add(currentTaskNum);
 			return newTask.getTaskId();
 		}
 		System.out.println("error insert");
 		return -1;
+	}
+	
+	public TaskFrame getTaskById(long id) {
+		return tasks.get(id);
+	}
+	
+	public String[] getTasksByUser(long userHash) {
+		CommonUser currentUser = UserManager.getInstance().getLoginUserByHashcode(userHash);
+		if (currentUser == null) {
+			return null;
+		}
+		Vector<Long> taskIds = currentUser.getUserTask();
+		if (taskIds.size() == 0) {
+			return null;
+		}
+		
+		java.util.Iterator<Long> it = taskIds.iterator();
+		String[] tasksEl = new String[50];
+		int i = 0;
+		while(it.hasNext()) {
+			Long bTask = it.next();
+			TaskFrame currentTask = getTaskById(bTask.longValue());
+			tasksEl[0+5*i] = String.valueOf(currentTask.getTaskId());
+			tasksEl[1+5*i] = currentTask.getTaskType().split("|")[0];
+			tasksEl[2+5*i] = currentTask.getTaskType().split("|")[1];
+			tasksEl[3+5*i] = currentTask.getCreateTime();
+			tasksEl[4+5*i] = String.valueOf(currentTask.getTaskState());
+			i ++;
+		}
+		return tasksEl;
 	}
 	
 	public boolean setTaskStateById (long id, TaskState state) {
@@ -175,4 +209,5 @@ public class TaskManager {
 		}
 		return false;
 	}
+	
 }

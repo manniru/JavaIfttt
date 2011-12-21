@@ -51,10 +51,10 @@ public class DataManager {
 		/**to update User when logout, to Persistence the date which modified*/
 		return true;
 	}
-	public boolean newUser(String username, String password, String mailaddr, 
+	public boolean newUser(String username, String password, String screenname, String mailaddr, 
 			long score, UserLevel userLevel, UserState userState) {
 		users.put(username, new CommonUser(username, password, 
-				mailaddr, score, userLevel, userState));
+				screenname, mailaddr, score, userLevel, userState));
 		return true;
 	}
 	public CommonUser getUserTest(String username) {

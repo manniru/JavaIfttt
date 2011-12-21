@@ -25,6 +25,7 @@ public class TaskFrame implements This, That{
 	private That 		action;
 	private String		owner;
 	private boolean		repeat;
+	private String 		createTime;
 	
 	public TaskFrame() {
 		// TODO Auto-generated constructor stub
@@ -110,5 +111,13 @@ public class TaskFrame implements This, That{
 
 	public boolean isRepeat() {
 		return repeat;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 }

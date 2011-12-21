@@ -9,6 +9,7 @@ package org.joe.ifttt.server.user;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import org.joe.ifttt.server.channel.Channel;
 import org.joe.ifttt.server.type.UserLevel;
@@ -24,8 +25,10 @@ public class CommonUser {
 	private long		score;
 	private UserLevel	userLevel;
 	private UserState	userState; 
+	private String 		screenName;
 	//map<channelType, channelObj>
 	private Map<String, Channel> channelMap;
+	private Vector<Long> userTask;
 	
 	public CommonUser(String username, String password, String mail) {
 		this.username = username;
@@ -36,6 +39,18 @@ public class CommonUser {
 			long sc, UserLevel ul, UserState us) {
 		this.username = un;
 		this.password = psw;
+		this.mailAddres = maddr;
+		this.score = sc;
+		this.userLevel = ul;
+		this.userState = us;
+		this.channelMap = new HashMap<String, Channel>(MAX_CHANNEL);
+		System.out.println("size of map: " + this.channelMap.size());
+	}
+	public CommonUser(String un, String psw, String sn, String maddr, 
+			long sc, UserLevel ul, UserState us) {
+		this.username = un;
+		this.password = psw;
+		this.screenName = sn;
 		this.mailAddres = maddr;
 		this.score = sc;
 		this.userLevel = ul;
@@ -93,5 +108,17 @@ public class CommonUser {
 	}
 	public UserState getUserState() {
 		return userState;
+	}
+	public String getScreenName() {
+		return screenName;
+	}
+	public void setScreenName(String screenName) {
+		this.screenName = screenName;
+	}
+	public Vector<Long> getUserTask() {
+		return userTask;
+	}
+	public void setUserTask(Vector<Long> userTask) {
+		this.userTask = userTask;
 	}
 }

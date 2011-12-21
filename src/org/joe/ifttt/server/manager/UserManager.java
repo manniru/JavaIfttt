@@ -57,7 +57,8 @@ public class UserManager {
 		loginUsers = new HashMap<Long, CommonUser>(MAX_NUM_OF_LOGIN_USERS);
 		currentLoginUsers = new Long(0);
 	}
-	public boolean createUser(String un, String psw, String maddr) {
+	
+	public boolean createUser(String un, String psw, String sn, String maddr) {
 		/**create a new user*/
 		if (null == un || null == psw) {
 			return false;
@@ -67,7 +68,7 @@ public class UserManager {
 		}
 		
 		boolean newUser = DataManager.getInstance().
-				newUser(un, psw, maddr, 0, UserLevel.INIT, UserState.ACTIVE);
+				newUser(un, psw, sn, maddr, 0, UserLevel.INIT, UserState.ACTIVE);
 		if (!newUser) {
 			return false;
 		}

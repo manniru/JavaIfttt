@@ -6,13 +6,13 @@
 			+ path + "/";
 %>
 
-<%@ page import="org.wzz.ifttt.response.Member.Register"%>
+<%@ page import="org.wzz.ifttt.response.Member.Message"%>
 <!DOCTYPE html> 
 <html> 
   	<head> 
 		<meta charset='utf-8'> 
 		<meta http-equiv="X-UA-Compatible" content="chrome=1"> 
-		<title>Sign up for ifttt - ifttt</title>  
+		<title>Send your Message</title>  
 
 		<link href="./stylesheet/index.css" media="screen" rel="stylesheet" type="text/css" /> 
 
@@ -56,7 +56,7 @@
         <div class="site"> 
           	<div class="container"> 
             	<div class="pagehead"> 
-    				<h1>Sign up for ifttt</h1> 
+    				<h1>Send your Message</h1> 
     				<ul class="pagehead-actions"> 
       					<!-- <li><a href="./login.html" class="minibutton btn-log-in-to-an-existing-account "><span><span class="icon"></span>Log in to an existing account</span></a></li> --> 
     				</ul> 
@@ -67,8 +67,7 @@
         				<span class="symbol">$</span><span class="amount">0</span><span class="duration">/month</span> 
       				</div> 
  
-    				<h3>You are signing up for the <strong>free</strong> account</h3> 
-    				<p>The cost for this account is <strong>$0 per month</strong>. You can cancel, downgrade, or upgrade at any time.</p> 
+    				<h3>You are sending a message</h3> 
   				</div> 
  
 				<div class="columns equacols bordered"> 
@@ -84,44 +83,24 @@
         						</div>
       						</div>
     					</noscript> 
-						<form action="IFTTT_Data_Success.jsp" id="signup_form" method="post">
+						<form action="SendMessage_Success.jsp" id="sendmessage_form" method="post">
 							<div style="margin:0;padding:0;display:inline">
 								<input name="authenticity_token" type="hidden" value="vDEZVd40UJEPD73U0V0OBDuDbiJVVgEwuMpghnVUeHo=" />
 							</div> 
   							<h2 class="subdued"> 
-    							Modify your free personal account
+    							Send A Message
   							</h2> 
   							<div class="fieldgroup"> 
-    							<div class="fields" id="user_signup_fields"> 
+    							<div class="fields" id="user_sendmessage_fields"> 
       								<dl class="form autocheck" id="user_signup_userid" style="display:none"> 
-    									<dt><label  name="user[login]">UserId</label></dt> 
-    									<dd><input  id="user_login" name="authcode" size="30" type="text" value="<%= request.getParameter("authcode")%>" /></dd></dl>
-    								<dl class="form autocheck" id="user_signup_username"> 
-    									<dt><label autocapitalize="off" error="false" for="user_login" name="user[name]">Username</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_name" name="user[name]" size="30" type="text" /></dd></dl>
-      								<dl class="form autocheck" id="user_signup_email"> 
-    									<dt><label autocapitalize="off" check-url="/signup_check/email" for="user_email" hint="We promise we won't share your email with anyone." name="user[email]">Email Address</label></dt> 
-    									<dd><input autocapitalize="off" check-url="/signup_check/email" hint="We promise we won't share your email with anyone." id="user_email" name="user[email]" size="30" type="text" onChange="checkEmail()"/><p class="note">We promise we won't share your email with anyone.</p></dd></dl> 
-      								<dl class="form autocheck" id="user_signup_password" style="display:none"> 
-    									<dt><label check-url="/signup_check/password" error="false" for="user_password" hint="Must contain one lowercase letter, one number, and be at least 7 characters long" name="user[password]">Password</label></dt> 
-    									<dd><input check-url="/signup_check/password" error="false" hint="Must contain one lowercase letter, one number, and be at least 7 characters long" id="user_password" name="user[password]" size="30" type="password" onChange="checkPassword()"/><p class="note">Must contain one lowercase letter, one number, and be at least 7 characters long</p></dd></dl>  
-      								<dl class="form" id="user_signup_confirm_password" style="display:none"> 
-    									<dt><label error="false" for="user_password_confirmation">Confirm Password</label></dt> 
-    									<dd><input error="false" id="user_password_confirmation" name="user[password_confirmation]" size="30" type="password" onChange="checkConfirmPassword()" /></dd></dl>
-    								<!-- 
-    								<dl class="form autocheck" id="user_signup_realname""> 
-    									<dt><label autocapitalize="off" error="false" for="user_realname" name="user[realname]">Realname</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_realname" name="user[realname]" size="30" type="text" /></dd></dl>
-    								<dl class="form autocheck" id="user_signup_city""> 
-    									<dt><label autocapitalize="off" error="false" for="user_city" name="user[city]">City</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_city" name="user[city]" size="30" type="text" /></dd></dl>
-    								<dl class="form autocheck" id="user_signup_birthday""> 
-    									<dt><label autocapitalize="off" error="false" for="user_birthday" name="user[birthday]">Birthday</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_birthday" name="user[birthday]" size="30" type="text"/></dd></dl>
-    								<dl class="form autocheck" id="user_signup_phonenumer""> 
-    									<dt><label autocapitalize="off" error="false" for="user_phonenumer" name="user[phonenumer]">PhoneNumber</label></dt> 
-    									<dd><input autocapitalize="off" error="false" id="user_phonenumer" name="user[phonenumer]" size="30" type="text" /></dd></dl>
-    								 -->
+    									<dt><label  name="authcode">AuthCode</label></dt> 
+    									<dd><input  id="authcode" name="authcode" size="30" type="text" value="<%= request.getParameter("authcode")%>" /></dd></dl>
+    								<dl class="form autocheck" id="user_receiver"> 
+    									<dt><label autocapitalize="off" error="false" for="user_recieve" name="user[receive]">Receiver</label></dt> 
+    									<dd><input autocapitalize="off" error="false" id="user_recieve" name="user[receive]" size="30" type="text" /></dd></dl>
+      								<dl class="form autocheck" id="user_message"> 
+    									<dt><label autocapitalize="off" error="false" for="user_message" name="user[message]">Message</label></dt> 
+    									<dd><input autocapitalize="off" error="false" id="user_message" name="user[message]" size="30" type="text" /></dd></dl>
     							</div> 
   							</div>  
   							<input id="user_plan" name="user[plan]" type="hidden" value="free" /> 
@@ -135,12 +114,12 @@
  							</div> 
  								 
   							<div class="form-warning"> 
-    							<p>By clicking on "Modify your account" below, you are agreeing to the
+    							<p>By clicking on "Send" below, you are agreeing to the
     							<a href="/terms" target="_blank">Terms of Service</a> and the
     							<a href="/privacy" target="_blank">Privacy Policy</a>.</p> 
   							</div> 
   							<div class="form-actions"> 
-   			 						<button type="submit" class="classy primary js-oneclick" id="signup_button" ><span>Modify your account</span></button> 
+   			 						<button type="submit" class="classy primary js-oneclick" id="signup_button" ><span>Send</span></button> 
   								</div> 
 						</form> 
 					</div><!-- /.column.main --> 
@@ -210,4 +189,3 @@
     	</div><!-- /#footer --> 
   	</body> 
 </html> 
-

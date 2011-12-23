@@ -1,12 +1,9 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*,org.wzz.ifttt.response.Member.Login,org.wzz.ifttt.response.Member.Message" pageEncoding="utf-8"%>
 <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<%@ page import=" org.wzz.ifttt.response.Member.Login,org.wzz.ifttt.response.Member.Task"%>
 <!DOCTYPE html> 
 <html> 
   	<head> 
@@ -27,38 +24,11 @@
   		<link href="/mzd.atom" rel="alternate" title="atom" type="application/atom+xml" />  
   	</head> 
 	<body class="logged_in page-profile mine windows  env-production ">
-		<%
-			long authcode=0;
-			org.wzz.ifttt.response.Member.Login login = new Login();
-			System.out.println("AUTH CODE = " + request.getParameter("authcode"));
-			if(request.getParameter("authcode")!=null)	{
-				System.out.println("***GET AUTHCODE***");
-				if(!Login.isLogin(Long.parseLong(request.getParameter("authcode")))) { %>
-					<jsp:forward page="IFTTT_Login_Error.jsp"></jsp:forward>
-				<% }
-				else authcode = Long.parseLong(request.getParameter("authcode"));
-			}
-			else {
-				if (request.getParameter("login").equals("System")&& request.getParameter("password").equals("Root")) {
-					%>
-  						<jsp:forward page="IFTTT_Manager.jsp?authcode=1;"></jsp:forward>
-  					<%
-  				}
-  				System.out.println("NOT LOGIN");
-  				login.setUserName(request.getParameter("login"));
-  				login.setPassword(request.getParameter("password"));
-  				login.setLoginHash(login.login());
-  				if (login.getUserName() == null) { %>
-  					<jsp:forward page="IFTTT_Login_Error.jsp"></jsp:forward>
-  				<%
-  				} 
-  				authcode = login.getLoginHash();
-  			}
-   		  	Task task = new Task();
-   		  	task.getMemberTask(authcode);
-   		  	%>
   		
-  		
+  		<% long authcode = Long.parseLong(request.getParameter("authcode")); 
+  			Login login = new Login();
+  			Message message = new Message();
+  		%>
 	    <div id="header" class="true clearfix"> 
         	<div class="container" class="clearfix"> 
           		<a class="logo" href="./ifttt"> 
@@ -87,7 +57,7 @@
     				<div id="user"> 
       					<a href="./admin">
       						<img height="20" src="" width="20" /></a> 
-      					<a href="Message.jsp?authcode=<%=authcode %>" class="name">Your Message:3</a> 
+      					<a href="usermain.jsp?authcode=<%=authcode %>" class="name">Return to main</a> 
     				</div> 
     				<ul id="user-links"> 
       					<li> 
@@ -128,15 +98,13 @@
       					<dl><dt>Name</dt><dd class="fn"><%=login.selectNickName(authcode)%></dd></dl> 
 
       					<dl><dt>Member Since</dt><dd>Oct 08, 2010</dd></dl>
-      					<dl><dt>Level</dt><dd class="fn"><%=login.getLevel(login.getUsernameByHashcode(authcode))%></dd></dl>
-      					<dl><dt>Integral</dt><dd class="fn"><%=login.getIntegral(authcode)%></dd></dl> 
     				</div><!-- /.first --> 
     				<div class="last"> 
       					<ul class="stats"> 
         				<li> 
-          				<a href="/admin/tasks"> 
-            				<strong><%=task.getTaskCountByAuthcode(authcode)%></strong> 
-            				<span>tasks</span> 
+          				<a href="/admin/messages"> 
+            				<strong><%=message.getMessageCountByAuthcode(authcode) %></strong> 
+            				<span>Message</span> 
           				</a> 
         				</li> 
         				<li> 
@@ -155,9 +123,9 @@
   				<div class="columns profilecols js-repo-filter"> 
     				<div class="first"> 
       					<h2> 
-         					Tasks <em>(<%=task.getTaskCountByAuthcode(authcode)%>)</em> 
+         					Message <em>(<%=message.getMessageCountByAuthcode(authcode)%>)</em> 
       					</h2>
-      					<a href="./newtask.jsp?authcode=<%=authcode %>"><button type="button" class="classy primary js-oneclick" name="submit">Create A New Task</button></a>
+      					<a href="./SendMessage.jsp?authcode=<%=authcode %>"><button type="button" class="classy primary js-oneclick" name="submit">Send Message</button></a>
  
       					<div class="filter-bar"> 
         					<div class="placeholder-field js-placeholder-field"> 
@@ -165,22 +133,21 @@
           						<input type="text" id="your-repos-filter" class="filter_input"> 
         					</div> 
         					<ul class="repo_filterer"> 
-        					<%int i=0;%>
-          						<li class="all_repos"><a class="repo_filter filter_selected" rel="active, unactive" onclick="<%for(int j=0;j<task.getTaskCountByAuthcode(authcode);j++) {%>document.getElementById('Task<%=j%>').style.display='inline';<%}%>">All Tasks</a></li> 
-            					<li><a href="#" class="repo_filter" rel="active">Active</a></li> 
-            					<li><a href="#" class="repo_filter" rel="unactive">Unactive</a></li> 
+          						<li class="all_repos"><a class="repo_filter filter_selected" rel="active, unactive" onclick="<%for(int j=0;j<message.getMessageCountByAuthcode(authcode);j++) {%>document.getElementById('Message<%=j%>').style.display='inline';<%}%>"> All Messages</a></li>
+            					<li><a href="#" class="repo_filter" rel="active">Private</a></li> 
+            					<li><a href="#" class="repo_filter" rel="unactive">Public</a></li>
         					</ul> 
       					</div>
       					<%
-       						while(i<task.getTaskCountByAuthcode(authcode)) {
+       						for(int i=0;i<message.getMessageCountByAuthcode(authcode);i++) {
        					%>
-						<ul id="Task<%=i%>" class="repositories repo_list" style="display: none">
+						<ul id="Message<%=i%>" class="repositories repo_list" style="display: none">
 							<li class="public source">
 								<ul class="repo-stats">
-									<li><!-- get Tasks --></li>
+									<li><!-- get Tasks -->Sender:System Message:Welcome</li>
 								</ul>
 								<h3>
-									<a>Test Task<%=i %></a>
+									<a>Message<%=i %></a>
 								</h3>
 								<div class="body">
 									<p class="description">
@@ -206,20 +173,14 @@
 											src="https://a248.e.akamai.net/assets.github.com/images/modules/dashboard/dossier/participation_legend.png?1284681402" />
 									</div>
 								</div>
-								<a href="ModifyTask.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="modify_button<%=i %>"><span>Modify</span></button></a>
-								<a href="Run.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="run_button<%=i %>"><span>Run</span></button></a>
-								<a href="Stop.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="stop_button<%=i %>"><span>Stop</span></button></a>
-								<a href="DeleteTask.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="delete_button<%=i %>"><span>Delete</span></button></a>
+								<a href="DeleteMessage.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="delete_button<%=i %>"><span>Delete</span></button></a>
 								<!-- /.body -->
 							</li>
 						
 						</ul>
 						<%
-							i++;
 							}
 						%>
-						<div id="control_button" style="display:none">
-						</div>
 						</form>
     				</div><!-- /.first --> 
     				<div class="last">
@@ -299,5 +260,3 @@
     	</div><!-- /#footer --> 
   	</body> 
 </html> 
-      
-  

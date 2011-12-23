@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*,org.wzz.ifttt.response.Member.*" pageEncoding="utf-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 
 <%
 String path = request.getContextPath();
@@ -7,12 +7,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-<%@ page import="org.wzz.ifttt.response.Member.Register"%>
+<%@ page import="org.wzz.ifttt.response.Member.Message"%>
 <html>
   <head>
     <base href="<%=basePath%>">
     
-    <title>My JSP 'IFTTT_Store_Data.jsp' starting page</title>
+    <title>Delete Message</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -30,14 +30,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
   	<%
-  		org.wzz.ifttt.response.Member.Register register = new Register();
-  		register.Store_Data(request.getParameter("user[login]"),request.getParameter("user[name]"),request.getParameter("user[password]"),request.getParameter("user[email]"));
-  		
+  		//do something deleteMessage
   	 %>
   	 <center>
   	 <form action="usermain.jsp" method="post">
-  	 	<input type="text" name="login" value="<%=request.getParameter("user[login]")%>" style="display:none"><br>
-  	 	<input type="password" name="password" value="<%=request.getParameter("user[password]")%>" style="display:none"><br>
+  	 	<%
+  	 		System.out.println("Data Success AUTHCODE = " +  request.getParameter("authcode"));
+  	 	 %>
+  	 	<input type="text" name="authcode" value="<%=request.getParameter("authcode")%>" style="display:none"><br>
   	 	<button type="submit" class="classy primary js-oneclick" name="submit" value="Return MainUser">Return MainUser</button>
   	 </form>
   	 </center>

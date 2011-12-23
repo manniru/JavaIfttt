@@ -6,11 +6,12 @@ import org.joe.ifttt.server.manager.DataManager;
 import org.joe.ifttt.server.manager.UserManager;
 import org.joe.ifttt.server.user.CommonUser;
 
+import sun.net.www.protocol.http.AuthCache;
 
 public class Login {
-	private String userName;
-	private String nickName;
-	private String password;
+	private String MemberId;
+	private String UserName;
+	private String Password;
 	private long loginHash;
 	
 	
@@ -18,15 +19,21 @@ public class Login {
 		/***/
 		
 		if (!isLogin(this.loginHash)) {
-			this.loginHash = UserManager.getInstance().loginUser(userName, password);
+			this.loginHash = UserManager.getInstance().loginUser(MemberId, Password);
 			if (this.loginHash < 0) {
 				System.out.println("login in error");
 			}
-			this.nickName = UserManager.getInstance().getLoginUserByHashcode(this.loginHash).getScreenName();
+			this.UserName = UserManager.getInstance().getLoginUserByHashcode(this.loginHash).getScreenName();
 		}
+		/*
+		Statement statement = SQL.initialMySQL();
+		if(Password.equals(DataBase.GetMemberkey(MemberId, statement))) {
+			return DataBase.GetMember(MemberId, statement);
+		}
+		else return null;
+		*/
 		return this.loginHash;
 	}
-	
 	public static boolean isLogin(long authCode) {
 		if (UserManager.getInstance().getLoginUserByHashcode(authCode) != null) {
 			return true;
@@ -44,6 +51,11 @@ public class Login {
 	}
 	
 	public String getLevel(String s) throws ClassNotFoundException {
+		
+		/*
+		Statement statement = SQL.initialMySQL();
+		return DataBase.GetLevel(s, statement);
+		*/
 		try {
 			return DataManager.getInstance().getUserTest(s).getUserLevel().toString();
 		} catch (SQLException e) {
@@ -53,12 +65,29 @@ public class Login {
 		return null;
 	}
 	
+	/*
+	public double getMoney(String s) throws ClassNotFoundException, SQLException {
+		Statement statement = SQL.initialMySQL();
+		return DataBase.GetMoney(s, statement);
+	}
+	*/
+	
 	public long getIntegral(long s) throws ClassNotFoundException {
+		/*
+		Statement statement = SQL.initialMySQL();
+		return DataBase.GetIntegral(s, statement);
+		*/
 		System.out.println("get Integral:" + s);
 		return UserManager.getInstance().getLoginUserByHashcode(s).getScore();
 	}
 	
-	public String selectNickName(long id) throws ClassNotFoundException {
+	public String selectUserName(long id) throws ClassNotFoundException {
+		/*
+		Statement statement = SQL.initialMySQL();
+		UserName = DataBase.GetMember(id,statement);
+		statement.close();
+		return UserName;
+		*/
 		return UserManager.getInstance().getLoginUserByHashcode(id).getScreenName();
 	}
 
@@ -70,28 +99,28 @@ public class Login {
 		this.loginHash = loginHash;
 	}
 	
-	public String getNickName() {
-		return nickName;
+	public String getUserName() {
+		return UserName;
 	}
 	
 	public String getPassword() {
-		return password;
+		return Password;
 	}
 	
-	public String getUserName() {
-		return userName;
-	}
-	
-	public void setNickName(String s) {
-		nickName = s;
-	}
-	
-	public void setPassword(String s) {
-		password = s;
+	public String getMemberId() {
+		return MemberId;
 	}
 	
 	public void setUserName(String s) {
-		userName = s;
+		UserName = s;
+	}
+	
+	public void setPassword(String s) {
+		Password = s;
+	}
+	
+	public void setMemberId(String s) {
+		MemberId = s;
 	}
 	
 }

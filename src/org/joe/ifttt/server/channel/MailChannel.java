@@ -221,7 +221,22 @@ public class MailChannel extends Channel{
  		email.send ();
 		System.out.println ( "Send email successful!" );
     }
- 
+    
+    public void sendSimpleMail(CommonContent content, String receiver) throws Exception { 
+    	/**send a simple mail*/
+    	SimpleEmail email = new SimpleEmail ();
+    	email.setHostName("smtp.gmail.com");  
+        email.setSSL(true);  
+        email.setSmtpPort(465);   
+        email.setTLS(true);    //gmail  
+    	email.setAuthentication (user.getUsername(), user.getPassword() );
+    	email.addTo ( "receiver", "Joe" );
+		email.setFrom ( "tongwei521@gmail.com", "Joetung" );
+		email.setSubject ( "Test message" );
+ 		email.setMsg (content.getTextString());
+ 		email.send ();
+		System.out.println ( "Send email successful!" );
+    }
     public void sendAttachMail() throws Exception {  
     	/**send a mail wiht attach*/
         MultiPartEmail email = new MultiPartEmail();  

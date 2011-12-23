@@ -1,5 +1,7 @@
 package org.joe.ifttt.server.manager;
 
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +9,7 @@ import org.joe.ifttt.server.type.UserLevel;
 import org.joe.ifttt.server.type.UserState;
 import org.joe.ifttt.server.user.CommonMessage;
 import org.joe.ifttt.server.user.CommonUser;
+import org.wzz.ifttt.database.DataBase;
 
 /**
  * File: 			DataManage.java
@@ -53,15 +56,51 @@ public class DataManager {
 	}
 	public boolean newUser(String username, String password, String screenname, String mailaddr, 
 			long score, UserLevel userLevel, UserState userState) {
+		/*
+		java.util.Date currentDate = new java.util.Date();
+		try {
+			DataBase.setMember("admin", username, password, mailaddr, screenname, score, 
+					userLevel.toString(), userState.toString(), "CHANNELS:", "TASKS:", 10, 0, 
+					new Date(currentDate.getYear(), currentDate.getMonth(), currentDate.getDay()));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+*/
 		users.put(username, new CommonUser(username, password, 
 				screenname, mailaddr, score, userLevel, userState));
+				
 		return true;
 	}
-	public CommonUser getUserTest(String username) {
+	
+	public CommonUser getUserTest(String username) throws SQLException, ClassNotFoundException {
 		/**a simple getUser, but not good*/
-		CommonUser curUser = users.get(username);
+		/*
+		String password = DataBase.getPassword(username);
+		if (password == null) {
+			return null;
+		}
+		String nickname = DataBase.getNickName(username);
+		String mailaddr = DataBase.getMailAddress(username);
+		long score = Long.parseLong(DataBase.getScore(username));
+		UserLevel userlevel = UserLevel.INIT;
+		String userStateString = DataBase.getUserState(username);
+		UserState userstate;
+		if (userStateString.equals("ACTIVE")) {
+			userstate = UserState.ACTIVE;
+		}
+		else {
+			userstate = UserState.INACTIVE;
+		}
+		CommonUser curUser = new CommonUser(username, password, nickname, mailaddr, score, userlevel, userstate);
 		return curUser;
+		*/
+		return users.get(username);
 	}
+	
 	public String getUser(String username) {
 		/**the real get User*/
 		CommonUser curUser = users.get(username);

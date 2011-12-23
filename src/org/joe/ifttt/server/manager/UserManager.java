@@ -17,6 +17,7 @@ package org.joe.ifttt.server.manager;
  *  	createUser
  *  	loginUser
  */
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,6 +62,7 @@ public class UserManager {
 	public boolean createUser(String un, String psw, String sn, String maddr) {
 		/**create a new user*/
 		if (null == un || null == psw) {
+			System.out.println("username != null and password !=null");
 			return false;
 		}
 		if (!GlobalFunctions.isLegalUsername(un)) {
@@ -72,7 +74,6 @@ public class UserManager {
 		if (!newUser) {
 			return false;
 		}
-		//users.put(un, new CommonUser(un, psw, maddr, 0, UserLevel.INIT, UserState.ACTIVE));
 		System.out.println("SUCCESS to CREATE A USER");
 		setNumOfUsers(getNumOfUsers() + 1);
 		return true;
@@ -93,7 +94,16 @@ public class UserManager {
 		}
 		//CommonUser currentUser = users.get(un);
 		//user get User test
-		CommonUser currentUser = DataManager.getInstance().getUserTest(un);
+		CommonUser currentUser = null;
+		try {
+			currentUser = DataManager.getInstance().getUserTest(un);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (null != currentUser) {
 			if (currentUser.getPassword().equals(psw)) { //never to use "==", gosh!
@@ -140,7 +150,16 @@ public class UserManager {
 			return false;
 		}
 		String username = loginUsers.get(userHash).getUsername();
-		CommonUser currentUser = DataManager.getInstance().getUserTest(username);
+		CommonUser currentUser = null;
+		try {
+			currentUser = DataManager.getInstance().getUserTest(username);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		currentUser.setScreenName(screenname);
 		currentUser.setMailAddres(email);
 		
@@ -150,7 +169,17 @@ public class UserManager {
 		/**get User by Username*/
 		//return users.get(username);
 		//need modified
-		return DataManager.getInstance().getUserTest(username);
+		CommonUser currentUser = null;
+		try {
+			currentUser = DataManager.getInstance().getUserTest(username);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return currentUser;
 	}
 	
 	public boolean addChannel (long userHash, String chanType, ChannelUser chanUser) {

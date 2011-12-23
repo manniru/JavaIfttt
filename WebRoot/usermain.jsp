@@ -6,7 +6,7 @@
 			+ path + "/";
 %>
 
-<%@ page import="org.wzz.ifttt.response.Member.Login, org.wzz.ifttt.response.Member.Task"%>
+<%@ page import=" org.wzz.ifttt.response.Member.Login,org.wzz.ifttt.response.Member.Task"%>
 <!DOCTYPE html> 
 <html> 
   	<head> 
@@ -28,29 +28,39 @@
   	</head> 
 	<body class="logged_in page-profile mine windows  env-production ">
 		<%
-			if (request.getParameter("login").equals("System")
-					&& request.getParameter("password").equals("Root")) {
-		%>
-  			<jsp:forward page="IFTTT_Manager.jsp"></jsp:forward>
-  		<%
+			long authcode=0;
+			Login login = new Login();
+			System.out.println("AUTH CODE = " + request.getParameter("authcode"));
+			if(request.getParameter("authcode")!=null)	{
+				System.out.println("***GET AUTHCODE***");
+				if(!Login.isLogin(Long.parseLong(request.getParameter("authcode")))) { %>
+					<jsp:forward page="IFTTT_Login_Error.jsp"></jsp:forward>
+				<% }
+				else authcode = Long.parseLong(request.getParameter("authcode"));
+			}
+			else {
+				if (request.getParameter("login").equals("System")&& request.getParameter("password").equals("Root")) {
+					%>
+  						<jsp:forward page="IFTTT_Manager.jsp"></jsp:forward>
+  					<%
+  				}
+  				System.out.println("NOT LOGIN");
+  				login.setMemberId(request.getParameter("login"));
+  				login.setPassword(request.getParameter("password"));
+  				login.setLoginHash(login.login());
+  				if (login.getUserName() == null) { %>
+  					<jsp:forward page="IFTTT_Login_Error.jsp"></jsp:forward>
+  				<%
+  				} 
+  				authcode = login.getLoginHash();
   			}
-  			Login login = new Login();
-  			login.setMemberId(request.getParameter("login"));
-  			login.setPassword(request.getParameter("password"));
-  			login.setLoginHash(login.login());
-  			if (login.getUserName() == null) {
-  		%>
-  			<jsp:forward page="IFTTT_Login_Error.jsp"></jsp:forward>
-  		<%
-  			}
-  		%> 
+   		  	Task task = new Task();
+			
+   		  	task.setTaskCount();
+   		  	task.getMemberTask(authcode);
+   		  	%>
   		
-  		<%
-   		  			Task task = new Task();
-   		  			task.setMemberId(login.getMemberId());
-   		  			task.setTaskCount();
-   		  			task.getMemberTask(login.getLoginHash());
-   		  		%>
+  		
 	    <div id="header" class="true clearfix"> 
         	<div class="container" class="clearfix"> 
           		<a class="logo" href="./ifttt"> 
@@ -84,7 +94,7 @@
     				<ul id="user-links"> 
       					<li> 
         					<a href="/inbox/notifications" id="notifications" class="tooltipped downwards" title="Notifications"> 
-          						<!-- need a message function, to show number of messages -->
+          						</span> 
         					</a> 
       					</li> 
       					<li><a href="/account" id="settings" class="tooltipped downwards" title="Account Settings"><span class="icon">Account Settings</span></a></li> 
@@ -103,12 +113,12 @@
       							<img height="48" src="https://secure.gravatar.com/avatar/16074080e71c3880ef54b974decebed6?s=140&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png" width="48" />
       						</a>
       					</span> 
-    					admin
-    					<em>(<%=login.getUserName()%>)</em> 
+    					<%=login.getUsernameByHashcode(authcode)%>
+    					<em>(<%=login.selectUserName(authcode)%>)</em> 
   					</h1> 
   					<ul class="pagehead-actions"> 
         				<li class="text">This is you!</li> 
-        				<li><a href="ModifyData.jsp?usertemp=<%=login.getMemberId() %>" class="minibutton btn-editprofile"><span>Edit Your Profile</span></a></li> 
+        				<li><a href="ModifyData.jsp?authcode=<%=authcode %>" class="minibutton btn-editprofile"><span>Edit Your Profile</span></a></li> 
   					</ul> 
   					
   					<div class="rule"></div> 
@@ -117,11 +127,11 @@
  
   				<div class="columns profilecols"> 
     				<div class="first vcard"> 
-      					<dl><dt>Name</dt><dd class="fn"><%=login.getUserName()%></dd></dl> 
+      					<dl><dt>Name</dt><dd class="fn"><%=login.selectUserName(authcode)%></dd></dl> 
 
       					<dl><dt>Member Since</dt><dd>Oct 08, 2010</dd></dl>
-      					<dl><dt>Level</dt><dd class="fn"><%=login.getLevel(login.getMemberId())%></dd></dl>
-      					<dl><dt>Integral</dt><dd class="fn"><%=login.getIntegral(login.getLoginHash())%></dd></dl> 
+      					<dl><dt>Level</dt><dd class="fn"><%=login.getLevel(login.getUsernameByHashcode(authcode))%></dd></dl>
+      					<dl><dt>Integral</dt><dd class="fn"><%=login.getIntegral(authcode)%></dd></dl> 
     				</div><!-- /.first --> 
     				<div class="last"> 
       					<ul class="stats"> 
@@ -148,7 +158,8 @@
     				<div class="first"> 
       					<h2> 
          					Tasks <em>(<%=task.getTaskCount()%>)</em> 
-      					</h2> 
+      					</h2>
+      					<a href="./newtask.jsp?authcode=<%=authcode %>"><button type="button" class="classy primary js-oneclick" name="submit">Create A New Task</button></a>
  
       					<div class="filter-bar"> 
         					<div class="placeholder-field js-placeholder-field"> 
@@ -168,17 +179,14 @@
 						<ul id="Task<%=i%>" class="repositories repo_list" style="display: none">
 							<li class="public source">
 								<ul class="repo-stats">
-									<li><%=task.getTaskId(i)%>
-										<%=task.getThisId(i)%>
-										<%=task.getThatId(i)%>
-										<%=task.gettime(i)%></li>
+									<li><!-- get Tasks --></li>
 								</ul>
 								<h3>
 									<a>Test Task<%=i %></a>
 								</h3>
 								<div class="body">
 									<p class="description">
-										<%=task.getIfRun(i)%>
+										<!--  get Isruntask -->
 									</p>
 
 									<p class="updated-at">
@@ -200,10 +208,10 @@
 											src="https://a248.e.akamai.net/assets.github.com/images/modules/dashboard/dossier/participation_legend.png?1284681402" />
 									</div>
 								</div>
-								<a href="Modify.jsp?taskid=<%=task.getTaskId(i) %>&thisid=<%=task.getThisId(i) %>&thatid=<%=task.getThatId(i) %>&time=<%=task.gettime(i) %>&ifrun=<%=task.getIfRun(i) %>"><button type="submit" class="classy primary js-oneclick" id="modify_button<%=i %>"><span>Modify</span></button></a>
-								<a href="Run.jsp?taskid=<%=task.getTaskId(i) %>&thisid=<%=task.getThisId(i) %>&thatid=<%=task.getThatId(i) %>&time=<%=task.gettime(i) %>&ifrun=<%=task.getIfRun(i) %>"><button type="submit" class="classy primary js-oneclick" id="run_button<%=i %>"><span>Run</span></button></a>
-								<a href="Stop.jsp?taskid=<%=task.getTaskId(i) %>&thisid=<%=task.getThisId(i) %>&thatid=<%=task.getThatId(i) %>&time=<%=task.gettime(i) %>&ifrun=<%=task.getIfRun(i) %>"><button type="submit" class="classy primary js-oneclick" id="stop_button<%=i %>"><span>Stop</span></button></a>
-								<a href="DeleteTask.jsp?taskid=<%=task.getTaskId(i) %>&thisid=<%=task.getThisId(i) %>&thatid=<%=task.getThatId(i) %>&time=<%=task.gettime(i) %>&ifrun=<%=task.getIfRun(i) %>"><button type="submit" class="classy primary js-oneclick" id="delete_button<%=i %>"><span>Delete</span></button></a>
+								<a href="ModifyTask.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="modify_button<%=i %>"><span>Modify</span></button></a>
+								<a href="Run.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="run_button<%=i %>"><span>Run</span></button></a>
+								<a href="Stop.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="stop_button<%=i %>"><span>Stop</span></button></a>
+								<a href="DeleteTask.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="delete_button<%=i %>"><span>Delete</span></button></a>
 								<!-- /.body -->
 							</li>
 						

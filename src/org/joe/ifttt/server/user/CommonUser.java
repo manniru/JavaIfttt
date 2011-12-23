@@ -19,6 +19,7 @@ import org.joe.ifttt.server.type.UserState;
 public class CommonUser {
 	/***This is the Common User Class*/
 	private final int MAX_CHANNEL = 10; 
+	private final int MAX_TASK = 10;
 	private String 		username;
 	private String 		password;
 	private String		mailAddress;
@@ -26,6 +27,9 @@ public class CommonUser {
 	private UserLevel	userLevel;
 	private UserState	userState; 
 	private String 		screenName;
+	private int			maxTaskNum;
+	private int			numOfTasks;
+	private String		createTime;
 	//map<channelType, channelObj>
 	private Map<String, Channel> channelMap;
 	private Vector<Long> userTask;
@@ -34,6 +38,8 @@ public class CommonUser {
 		this.username = username;
 		this.password = password;
 		this.mailAddress = mail;
+		this.numOfTasks = 0;
+		this.userTask = new Vector<Long>(MAX_TASK);
 	}
 	public CommonUser(String un, String psw, String maddr, 
 			long sc, UserLevel ul, UserState us) {
@@ -44,6 +50,8 @@ public class CommonUser {
 		this.userLevel = ul;
 		this.userState = us;
 		this.channelMap = new HashMap<String, Channel>(MAX_CHANNEL);
+		this.userTask = new Vector<Long>(MAX_TASK);
+		this.numOfTasks = 0;
 		System.out.println("size of map: " + this.channelMap.size());
 	}
 	public CommonUser(String un, String psw, String sn, String maddr, 
@@ -55,7 +63,9 @@ public class CommonUser {
 		this.score = sc;
 		this.userLevel = ul;
 		this.userState = us;
+		this.numOfTasks = 0;
 		this.channelMap = new HashMap<String, Channel>(MAX_CHANNEL);
+		this.userTask = new Vector<Long>(MAX_TASK);
 		System.out.println("size of map: " + this.channelMap.size());
 	}
 	public String toString() {
@@ -120,5 +130,23 @@ public class CommonUser {
 	}
 	public void setUserTask(Vector<Long> userTask) {
 		this.userTask = userTask;
+	}
+	public int getMaxTaskNum() {
+		return maxTaskNum;
+	}
+	public void setMaxTaskNum(int maxTaskNum) {
+		this.maxTaskNum = maxTaskNum;
+	}
+	public int getNumOfTasks() {
+		return numOfTasks;
+	}
+	public void setNumOfTasks(int numOfTasks) {
+		this.numOfTasks = numOfTasks;
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 }

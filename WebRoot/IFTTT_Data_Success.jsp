@@ -7,7 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-<%@ page import="org.wzz.ifttt.response.Member.Login, org.wzz.ifttt.response.Member.ModifyData"%>
+<%@ page import="org.wzz.ifttt.response.Member.Login,org.wzz.ifttt.response.Member.ModifyData"%>
 <html>
   <head>
     <base href="<%=basePath%>">
@@ -30,18 +30,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
   	<%
-  		Login temp = new Login();
   		ModifyData modifydata = new ModifyData();
   		modifydata.setMemberId(request.getParameter("user[login]"));
-  		modifydata.setDatatemp("wang","1990-1-1",null,null,null);
-  		temp.setMemberId(request.getParameter("user[login]"));
-  		temp.setPassword("123456");
-  		
+  		//modifydata.setDatatemp("wang","1990-1-1",null,null,null);	
   	 %>
   	 <center>
   	 <form action="usermain.jsp" method="post">
-  	 	<input type="text" name="login" value="<%=temp.getMemberId()%>" style="display:none"><br>
-  	 	<input type="password" name="password" value="<%=temp.getPassword()%>" style="display:none"><br>
+  	 	<%
+  	 		System.out.println("Data Success AUTHCODE = " +  request.getParameter("authcode"));
+  	 	 %>
+  	 	<input type="text" name="authcode" value="<%=request.getParameter("authcode")%>" style="display:none"><br>
   	 	<button type="submit" class="classy primary js-oneclick" name="submit" value="Return MainUser">Return MainUser</button>
   	 </form>
   	 </center>

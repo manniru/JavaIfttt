@@ -17,6 +17,7 @@ import org.joe.ifttt.server.user.CommonUser;
 public class SendMailAction extends BasicAction implements That {
 	private MailChannel mail;
 	private CommonContent content;
+	private String receiver;
 	
 	public SendMailAction () {
 		
@@ -27,6 +28,11 @@ public class SendMailAction extends BasicAction implements That {
 	public SendMailAction (CommonUser user, CommonContent content) {
 		mail = (MailChannel) user.getChannel("mail");
 		this.content = content;
+	}
+	public SendMailAction (CommonUser user, CommonContent content, String receiver) {
+		mail = (MailChannel) user.getChannel("mail");
+		this.content = content;
+		this.receiver = receiver;
 	}
 	@Override
 	public void setChannel(Channel channel) {
@@ -42,6 +48,12 @@ public class SendMailAction extends BasicAction implements That {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public String getReceiver() {
+		return receiver;
+	}
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
 	}
 
 }

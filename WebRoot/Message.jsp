@@ -24,6 +24,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		<link href="/mzd.atom" rel="alternate" title="atom" type="application/atom+xml" />  
   	</head> 
 	<body class="logged_in page-profile mine windows  env-production ">
+		<form id="ajax_message_form" style="display:none;">
+　　　			<p>This form </p>
+       			<div class="logos" id="this_logo">
+					<img alt="time" height="65" src="./pic/time.jpg" width="65" type="submit">
+    				<img alt="weibo" height="81" src="./pic/sina_weibo.png" width="172" type="submit">
+    				<img alt="gmail" height="68" src="./pic/gmail_logo.jpg" width="155" type="submit">
+					
+				</div>
+			<input value="post" id="ajaxSubmit" type="submit">
+		</form>
   		
   		<% long authcode = Long.parseLong(request.getParameter("authcode")); 
   			Login login = new Login();
@@ -125,7 +135,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       					<h2> 
          					Message <em>(<%=message.getMessageCountByAuthcode(authcode)%>)</em> 
       					</h2>
-      					<a href="./SendMessage.jsp?authcode=<%=authcode %>"><button type="button" class="classy primary js-oneclick" name="submit">Send Message</button></a>
+      					<a href= "./SendMessage.jsp?authcode=<%=authcode %>"><button type="button" class="classy primary js-oneclick" name="submit">Send Message</button></a>
  
       					<div class="filter-bar"> 
         					<div class="placeholder-field js-placeholder-field"> 

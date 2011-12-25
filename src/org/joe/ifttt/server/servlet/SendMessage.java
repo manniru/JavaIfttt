@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.joe.ifttt.server.manager.UserManager;
+
 import com.sun.xml.internal.stream.writers.XMLWriter;
 
 
@@ -68,8 +70,13 @@ public class SendMessage extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//get the new message
 		String receiver = request.getParameter("reciever");
 		String message = request.getParameter("message");
+		Long authCode = Long.parseLong(request.getParameter("authCode"));
+		UserManager.getInstance().sendMessgaeTo(authCode.longValue(), receiver, message);
+		
+		//reflesh the list of the messages
 		System.out.println("receiver:" + receiver + "message:" + message);
 		String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + 
 						"<msg>" + 
@@ -77,7 +84,6 @@ public class SendMessage extends HttpServlet {
 						"<content>" + "i love you" + "</content>" + 
 						"</msg>";
 	    response.setContentType("text/xml;charset=utf-8");  
-	    
 	    
 		PrintWriter out = response.getWriter();
 		out.println(xmlString);

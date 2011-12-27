@@ -248,7 +248,7 @@ public class DataBase {
 	}
 	
 	//更新Member表
-	public static boolean setMember(String ManagerPassword,String UserName,String Password,String MailAddress,String NickName,long Score,String UserLevel,String UserState,String Channels,String Tasks,int MaxTask,int NumOfTasks,Date date) throws SQLException, ClassNotFoundException {
+	public static boolean setMember(String ManagerPassword,String UserName,String Password,String MailAddress,String NickName,long Score,String UserLevel,String UserState,String Channels,String Tasks,int MaxTask,int NumOfTasks,String date) throws SQLException, ClassNotFoundException {
 		if(UserName==null) return false;
 		else {
 			Statement statement = SQL.initialMySQL();
@@ -257,7 +257,11 @@ public class DataBase {
 			if(resultset.next()==false) {
 				if(Password==null||NickName==null||MailAddress==null||Score==-1||UserLevel==null) return false;
 				else {
-					String ExeStringA = "insert into Member values('" + UserName + "','" + Password + "','" + MailAddress + "','" + NickName + "'," + Score + ",'" + UserLevel + "'" + UserState + "','" + Channels + "','" + Tasks + "'," + MaxTask + "," + NumOfTasks + ",'" + date + "')";
+					String ExeStringA = "insert into Member values('" 
+						+ UserName + "','" + Password + "','" + NickName+ "','" 
+						+ MailAddress + "','" + Channels + "','" + Tasks 
+						+ "'," + + Score + "," + MaxTask + "," + NumOfTasks 
+						+ ",'"+ date + "','" + UserLevel + "','" + UserState + "')";
 					SQL.SQLupdate(ExeStringA, statement);
 					statement.close();
 					return true;
@@ -265,43 +269,43 @@ public class DataBase {
 			}
 			else {
 				if(Password!=null) {
-					String ExeStringB1 = "update Member set Password = '" + Password + "'";
+					String ExeStringB1 = "update Member set Password = '" + Password + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB1, statement);
 				}
 				if(NickName!=null) {
-					String ExeStringB2 = "update Member set NickName = '" + NickName + "'";
+					String ExeStringB2 = "update Member set NickName = '" + NickName + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB2, statement);
 				}
 				if(MailAddress!=null) {
-					String ExeStringB3 = "update Member set MailAddress = '" + MailAddress + "'";
+					String ExeStringB3 = "update Member set MailAddress = '" + MailAddress + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB3, statement);
 				}
 				if(UserState!=null) {
-					String ExeStringB4 = "update Member set UserState = '" + UserState + "'";
+					String ExeStringB4 = "update Member set UserState = '" + UserState + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB4, statement);
 				}
 				if(Channels!=null) {
-					String ExeStringB5 = "update Member set Channels = '" + Channels + "'";
+					String ExeStringB5 = "update Member set Channels = '" + Channels + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB5, statement);
 				}
 				if(Tasks!=null) {
-					String ExeStringB6 = "update Member set Tasks = '" + Tasks + "'";
+					String ExeStringB6 = "update Member set Tasks = '" + Tasks + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB6, statement);
 				}
 				if(Score!=-1) {
-					String ExeStringB7 = "update Member set Score = '" + Score + "'";
+					String ExeStringB7 = "update Member set Score = '" + Score + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB7, statement);
 				}
 				if(MaxTask!=-1) {
-					String ExeStringB8 = "update Member set MaxTask = '" + MaxTask + "'";
+					String ExeStringB8 = "update Member set MaxTask = '" + MaxTask + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB8, statement);
 				}
 				if(NumOfTasks!=-1) {
-					String ExeStringB9 = "update Member set NumOfTasks = '" + NumOfTasks + "'";
+					String ExeStringB9 = "update Member set NumOfTasks = '" + NumOfTasks + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB9, statement);
 				}
 				if(date!=null) {
-					String ExeStringB10 = "update Member set CreateTime = '" + date + "'";
+					String ExeStringB10 = "update Member set CreateTime = '" + date + "'" + "where UserName = '" + UserName + "'";
 					SQL.SQLupdate(ExeStringB10, statement);
 				}
 				statement.close();
@@ -311,16 +315,21 @@ public class DataBase {
 	}
 	
 	//更新Task表
-	public static boolean setTask(String ManagerPassword,long TaskId,String TaskName,String TaskState,String TaskType,String Trigger,String Action,String UserName,int Repeat,Date CreateTime) throws SQLException, ClassNotFoundException {
+	public static boolean setTask(String ManagerPassword,long TaskId,String TaskName,String TaskState,String TaskType,String Trigger,String Action,String UserName,int Repeat,String date) throws SQLException, ClassNotFoundException {
 		if(TaskId==-1) return false;
 		else {
 			Statement statement = SQL.initialMySQL();
 			String ExeString = "Select TaskId from Task where TaskId=" + (int)TaskId;
 			ResultSet resultset = SQL.SQLexe(ExeString, statement);
 			if(resultset.next()==false) {
-				if(TaskState==null||UserName==null||Repeat==-1||CreateTime==null) return false;
+				if(TaskState==null||UserName==null||Repeat==-1||date==null) return false;
 				else {
-					String ExeStringA = "insert into Member values(" + (int)TaskId + ",'" + TaskName + "','" + TaskState + "','" + TaskType + "','" + Trigger + "','" + Action + "','" + UserName + "'," + Repeat + ",'" + CreateTime + "')";
+					String ExeStringA = "insert into Task values(" + 
+							(int)TaskId + ",'" + TaskName + "','" 
+							+ TaskState + "','" + TaskType + "','" 
+							+ Trigger + "','" + Action + "','" 
+							+ UserName + "'," + Repeat + ",'" 
+							+ date + "')";
 					SQL.SQLupdate(ExeStringA, statement);
 					statement.close();
 					return true;
@@ -328,35 +337,35 @@ public class DataBase {
 			}
 			else {
 				if(TaskName!=null) {
-					String ExeStringB1 = "update Task set TaskName = '" + TaskName + "'";
+					String ExeStringB1 = "update Task set TaskName = '" + TaskName + "'" + "where TaskId = " + TaskId;
 					SQL.SQLupdate(ExeStringB1, statement);
 				}
 				if(TaskState!=null) {
-					String ExeStringB2 = "update Task set TaskState = '" + TaskState + "'";
+					String ExeStringB2 = "update Task set TaskState = '" + TaskState + "'" + "where TaskId = " + TaskId;
 					SQL.SQLupdate(ExeStringB2, statement);
 				}
 				if(TaskType!=null) {
-					String ExeStringB3 = "update Task set TaskType = '" + TaskType + "'";
+					String ExeStringB3 = "update Task set TaskType = '" + TaskType + "'" + "where TaskId = " + TaskId;
 					SQL.SQLupdate(ExeStringB3, statement);
 				}
 				if(Trigger!=null) {
-					String ExeStringB4 = "update Task set Trigger = '" + Trigger + "'";
+					String ExeStringB4 = "update Task set Trigger = '" + Trigger + "'" + "where TaskId = " + TaskId;
 					SQL.SQLupdate(ExeStringB4, statement);
 				}
 				if(Action!=null) {
-					String ExeStringB5 = "update Task set Action = '" + Action + "'";
+					String ExeStringB5 = "update Task set Action = '" + Action + "'" + "where TaskId = " + TaskId;
 					SQL.SQLupdate(ExeStringB5, statement);
 				}
 				if(UserName!=null) {
-					String ExeStringB6 = "update Task set UserName = '" + UserName + "'";
+					String ExeStringB6 = "update Task set UserName = '" + UserName + "'" + "where TaskId = " + TaskId;
 					SQL.SQLupdate(ExeStringB6, statement);
 				}
 				if(Repeat!=-1) {
-					String ExeStringB7 = "update Task set Repeat = " + Repeat;
+					String ExeStringB7 = "update Task set Repeat = " + Repeat + "where TaskId = " + TaskId;
 					SQL.SQLupdate(ExeStringB7, statement);
 				}
-				if(CreateTime!=null) {
-					String ExeStringB8 = "update Task set CreateTime = '" + CreateTime + "'";
+				if(date!=null) {
+					String ExeStringB8 = "update Task set CreateTime = '" + date + "'" + "where TaskId = " + TaskId;
 					SQL.SQLupdate(ExeStringB8, statement);
 				}
 				statement.close();

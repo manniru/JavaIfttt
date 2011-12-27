@@ -20,10 +20,51 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
    		<link href="./stylesheet/index.css" media="screen" rel="stylesheet" type="text/css" /> 
    		<script src="" type="text/javascript"></script> 
+   		<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js'></script>
+		<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/scriptaculous/1/scriptaculous.js'></script>
+		<script type='text/javascript' src='./lightview/js/lightview.js'></script>
+		<script type='text/javascript' src='./lightview/js/scriptaculous.js?load=effects'></script>
+		<script type='text/javascript' src='./lightview/js/effects.js'></script>
+		<script type='text/javascript' src='./script/message.js'></script>
+		<script type='text/javascript' src='./script/ajax.js'></script>
+		<script type="text/javascript">
+			var msgRequest = createRequest();
+		</script> 
+		
+		<link rel="stylesheet" type="text/css" href="./lightview/css/lightview.css" />
      
   		<link href="/mzd.atom" rel="alternate" title="atom" type="application/atom+xml" />  
   	</head> 
-	<body class="logged_in page-profile mine windows  env-production ">
+	<body class="logged_in  windows  env-production">
+		
+		 <form id="ajax_message_form" style="display:none;">
+			<h2>
+    			Send A Message
+  			</h2> 
+  			<div class="fieldgroup"> 
+    			<div class="fields" id="user_sendmessage_fields"> 
+      				<dl class="form autocheck" id="user_signup_userid" style="display:none"> 
+    				<dt><label  name="authcode">AuthCode</label></dt> 
+    				<dd><input  id="authcode" name="authcode" size="30" type="text" value="<%= request.getParameter("authcode")%>" /></dd></dl>
+    			<dl class="form autocheck" id="user_receiver"> 
+    				<dt><label autocapitalize="off" error="false" for="user_message_recieve" name="user[receive]">Receiver</label></dt> 
+    				<dd><input autocapitalize="off" error="false" id="user_message_recieve" name="user[receive]" size="30" type="text" /></dd></dl>
+      			<dl class="form autocheck" id="user_message"> 
+    				<dt><label autocapitalize="off" error="false" for="user_message_content" name="user[message]">Message</label></dt> 
+    				<dd><input autocapitalize="off" error="false" id="user_message_content" name="user[message]" size="30" type="text" /></dd></dl>
+    			</div> 
+  			</div>  
+  			<input id="user_plan" name="user[plan]" type="hidden" value="free" /> 
+  			<input id="org_plan" name="org_plan" type="hidden" /> 
+  			<div class="fieldgroup" style="display:none"> 
+    			<div class="fields"> 
+      				<dl class="form"> 
+    					<dt><label error="false" for="user_coupon" name="user[coupon]">Coupon</label></dt> 
+   	 					<dd><input error="false" id="user_coupon" name="user[coupon]" size="30" type="text" /></dd></dl> 
+    			</div> 
+ 			</div> 
+			<input value="Send" id="ajaxSubmit" class = "classy primary js-oneclick" type="button" onClick="sendMessage();">
+		</form>
   		
   		<% long authcode = Long.parseLong(request.getParameter("authcode")); 
   			Login login = new Login();
@@ -71,7 +112,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   				</div> <!-- /.userbox -->
         	</div> 
       	</div> <!-- header --> 
-  
+  		
+
+		
+		
         <div class="site"> 
           	<div class="container"> 
 				<div class="pagehead userpage" data-name="admin"> 
@@ -125,7 +169,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       					<h2> 
          					Message <em>(<%=message.getMessageCountByAuthcode(authcode)%>)</em> 
       					</h2>
-      					<a href="./SendMessage.jsp?authcode=<%=authcode %>"><button type="button" class="classy primary js-oneclick" name="submit">Send Message</button></a>
+      					<div class="signup-entice">
+      					      <a href="#ajax_message_form" class="lightview signup-button" title=' :: :: topclose: true, autosize: true'>Send Message</a>
+						
+ 						</div> 
  
       					<div class="filter-bar"> 
         					<div class="placeholder-field js-placeholder-field"> 

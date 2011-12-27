@@ -28,6 +28,7 @@ import org.joe.ifttt.server.channel.WeiboChannel;
 import org.joe.ifttt.server.type.UserLevel;
 import org.joe.ifttt.server.type.UserState;
 import org.joe.ifttt.server.user.ChannelUser;
+import org.joe.ifttt.server.user.CommonMessage;
 import org.joe.ifttt.server.user.CommonUser;
 
 public class UserManager {
@@ -211,8 +212,8 @@ public class UserManager {
 		if (!userExists(receiver)) {
 			return false;
 		}
-		return DataManager.getInstance().newMessage(new Long(0), 
-				currentUser.getUsername(), receiver, content);
+		CommonMessage msg = new CommonMessage();
+		return DataManager.getInstance().newMessage(0, msg);
 	}
 	
 	public boolean userExists (String username) {

@@ -27,6 +27,7 @@ function addTimeEventToRight() {
 	var thisTypeEl = document.getElementById("this_type");
 	var timeEventLogo = document.getElementById("right_this_time_logo");
 	var timeEventForm = document.getElementById("time_event_form");
+	var ajaxThisForm = document.getElementById("ajax_this_form");
 	if (thisTypeEl.value === "gmail-receive") {
 		var gmailEventLogo = document.getElementById("right_this_gmail_logo");
 		var gmailEventForm = document.getElementById("gmail_event_form");
@@ -42,6 +43,7 @@ function addTimeEventToRight() {
 	timeEventLogo.style.display = 'inline';
 	timeEventForm.style.display = 'inline';
 	thisTypeEl.value = "time-after";
+	ajaxThisForm.submit();
 
 }
 
@@ -50,6 +52,7 @@ function addWeiboEventToRight() {
 	var thisTypeEl = document.getElementById("this_type");
 	var weiboEventLogo = document.getElementById("right_this_weibo_logo");
 	var weiboEventForm = document.getElementById("weibo_event_form");
+	var ajaxThisForm = document.getElementById("ajax_this_form");
 	//alert(thisTypeEl.value);
 	if(thisTypeEl.value === "time-after") {
 		//alert("thistype == " + thisTypeEl.value );
@@ -67,6 +70,8 @@ function addWeiboEventToRight() {
 	weiboEventLogo.style.display = 'inline';
 	weiboEventForm.style.display = 'inline';
 	thisTypeEl.value = "weibo-update";
+	ajaxThisForm.submit();
+
 }
 
 function addGmailEventToRight() {
@@ -74,6 +79,7 @@ function addGmailEventToRight() {
 	var thisTypeEl = document.getElementById("this_type");
 	var gmailEventLogo = document.getElementById("right_this_gmail_logo");
 	var gmailEventForm = document.getElementById("gmail_event_form");
+	var ajaxThisForm = document.getElementById("ajax_this_form");
 	//alert(thisTypeEl.value);
 	if(thisTypeEl.value === "time-after") {
 		var timeEventLogo = document.getElementById("right_this_time_logo");
@@ -90,6 +96,7 @@ function addGmailEventToRight() {
 	gmailEventLogo.style.display = 'inline';
 	gmailEventForm.style.display = 'inline';
 	thisTypeEl.value = "gmail-receive";
+	ajaxThisForm.submit();
 }
 
 

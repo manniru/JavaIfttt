@@ -96,7 +96,7 @@
 		<!--<a href='#ajaxform' class='lightview signup-button' title=' :: :: topclose: true, autosize: true' >Show Form</a>-->
 		<!-- this part is not display when the window load -->
 			<form id="ajax_this_form" style="display:none;">
-　　　			<p>This form </p>
+　　　				<p>This form </p>
        			<div class="logos" id="this_logo">
 					<img alt="time" height="65" src="./pic/time.jpg" width="65" type="submit">
     				<img alt="weibo" height="81" src="./pic/sina_weibo.png" width="172" type="submit">

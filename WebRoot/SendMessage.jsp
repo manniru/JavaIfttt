@@ -84,9 +84,6 @@
       						</div>
     					</noscript> 
 						<form action="SendMessage_Success.jsp" id="sendmessage_form" method="post">
-							<div style="margin:0;padding:0;display:inline">
-								<input name="authenticity_token" type="hidden" value="vDEZVd40UJEPD73U0V0OBDuDbiJVVgEwuMpghnVUeHo=" />
-							</div> 
   							<h2 class="subdued"> 
     							Send A Message
   							</h2> 

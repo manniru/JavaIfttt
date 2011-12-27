@@ -33,6 +33,7 @@ public class DataManager {
 	private Long messageNum;
 	private Map<Long, CommonMessage> msgs;
 	private Map<String, CommonUser> users;
+	
 	public static DataManager getInstance() {
 		/**get instance of task manager*/
 		if (_manager  == null) {
@@ -49,7 +50,14 @@ public class DataManager {
 		msgs = new HashMap<Long, CommonMessage>(100);
 		users = new HashMap<String, CommonUser>(MAX_NUM_OF_USERS);
 	}
-
+	
+	public boolean newMessage(long msgId, CommonMessage newmsg) {
+		msgs.put(msgId, newmsg);
+		return true;
+	}
+	public CommonMessage getMessage(long msgId) {
+		return msgs.get(msgId);
+	}
 	public boolean updateUser() {
 		/**to update User when logout, to Persistence the date which modified*/
 		return true;
@@ -122,10 +130,7 @@ public class DataManager {
 	public boolean isUser(String username) {
 		return true;
 	}
-	public boolean newMessage(Long no, String s, String r, String c) {
-		
-		return true;
-	}
+
 	public boolean getMessage() {
 		return true;
 	}

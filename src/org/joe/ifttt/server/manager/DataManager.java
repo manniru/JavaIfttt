@@ -9,7 +9,7 @@ import org.joe.ifttt.server.type.UserLevel;
 import org.joe.ifttt.server.type.UserState;
 import org.joe.ifttt.server.user.CommonMessage;
 import org.joe.ifttt.server.user.CommonUser;
-import org.wzz.ifttt.database.DataBase;
+import org.wzz.ifttt.database.DBfunction;;
 
 /**
  * File: 			DataManage.java

@@ -14,7 +14,7 @@ public class Login {
 	private long loginHash;
 	
 	
-	public long login() throws ClassNotFoundException {
+	public long login() throws ClassNotFoundException, SQLException {
 		/***/
 		
 		if (!isLogin(this.loginHash)) {
@@ -45,7 +45,14 @@ public class Login {
 	
 	public String getLevel(String s) throws ClassNotFoundException {
 		try {
-			return DataManager.getInstance().getUserTest(s).getUserLevel().toString();
+			//String level = DataManager.getInstance().getUserTest(s).getUserLevel().toString();
+			String level = DataManager.getInstance().DB_getUser(s).getUserLevel().toString();
+			if (level == null) {
+				return "";
+			}
+			else {
+				return level;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,12 +4,19 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
+import org.joe.ifttt.server.channel.MailChannel;
+import org.joe.ifttt.server.channel.WeiboChannel;
+import org.joe.ifttt.server.task.TaskFrame;
+import org.joe.ifttt.server.task.action.That;
+import org.joe.ifttt.server.task.event.This;
 import org.joe.ifttt.server.type.UserLevel;
 import org.joe.ifttt.server.type.UserState;
 import org.joe.ifttt.server.user.CommonMessage;
 import org.joe.ifttt.server.user.CommonUser;
-import org.wzz.ifttt.database.DBfunction;;
+import org.wzz.ifttt.database.DBfunction;
+import org.wzz.ifttt.database.MsgDBfunc;
 
 /**
  * File: 			DataManage.java
@@ -49,6 +56,149 @@ public class DataManager {
 		messageNum = new Long(0);
 		msgs = new HashMap<Long, CommonMessage>(100);
 		users = new HashMap<String, CommonUser>(MAX_NUM_OF_USERS);
+	}
+	
+	public boolean DB_newTask(long taskid, TaskFrame task, String username) throws SQLException, ClassNotFoundException {
+		DBfunction.setTask("0", taskid, task.getTaskName(), 
+				task.getTaskState().toString(), task.getTaskType().toString(), 
+				task.getThisParam(), task.getThatParam(), username, 0, 
+				(new java.util.Date()).toString());
+		return true;
+	}
+	
+	public TaskFrame DB_getTask(long taskid) throws SQLException, ClassNotFoundException {
+		TaskFrame task = new TaskFrame();
+		task.setTaskId(taskid);
+		task.setTaskName(DBfunction.getTaskName(taskid));
+		task.setTaskType(DBfunction.getTaskType(taskid));
+		task.setOwner(DBfunction.getOwner(taskid));
+		task.setThisParam(DBfunction.getTrigger(taskid));
+		task.setThatParam(DBfunction.getAction(taskid));
+		task.setRepeat(DBfunction.getRepeat(taskid)=="0"?false:true);
+		return task;
+	}
+	public int DB_getMsgCount() throws SQLException, ClassNotFoundException {
+		return MsgDBfunc.msgNum();
+	}
+	
+	public boolean DB_updateUser(String username, CommonUser usr) 
+			throws SQLException, ClassNotFoundException {
+		String channelString = "";
+		String tasksString = "";
+		WeiboChannel wChannel = (WeiboChannel)(usr.getChannel("weibo"));
+		MailChannel mChannel = (MailChannel)(usr.getChannel("mail"));
+		if (wChannel != null) {
+			channelString = channelString + "|weibo" + ":" +
+					wChannel.getUser().getUsername() + ":" + wChannel.getUser().getPassword();
+		}
+		if (mChannel != null) {
+			channelString = channelString + "|mail" + ":" + 
+					mChannel.getUser().getUsername() + ":" + mChannel.getUser().getPassword();
+		}
+		
+		java.util.Iterator<Long> it = usr.getUserTask().iterator();
+		while(it.hasNext()) {
+			Long task = it.next();
+			tasksString = tasksString + task.toString() + ",";
+		}
+		
+		DBfunction.setMember("0", username, usr.getPassword(), usr.getMailAddres(), 
+				usr.getScreenName(), usr.getScore(), usr.getUserLevel().toString(), 
+				usr.getUserState().toString(), channelString, tasksString, usr.getMaxTaskNum(), usr.getNumOfTasks(), usr.getCreateTime());	
+		return true;
+	}
+	public boolean DB_newMessage(int msgId, CommonMessage newmsg) throws SQLException, ClassNotFoundException {
+		MsgDBfunc.sendMsg(msgId, newmsg.getSenderString(), 
+				newmsg.getReceiverString(), newmsg.getContent());
+		return true;
+	}
+	
+	public Vector<CommonMessage> DB_getSendMessage(String username) throws ClassNotFoundException, SQLException {
+		Vector<String> vector = MsgDBfunc.getMsgByUserName(username, 1);
+		Vector<CommonMessage> msgs = new Vector<CommonMessage>(10, 5);
+		java.util.Iterator<String> it;
+		it = vector.iterator();
+		while(it.hasNext()) {
+			String reString = it.next();
+			String[] eleString = reString.split(":");
+			CommonMessage newMsg = new CommonMessage(eleString[1], eleString[2], eleString[3]);
+			msgs.add(newMsg);
+			/*
+			for (int i = 0; i < eleString.length; i++) {
+				System.out.print(i + " : " + eleString[i] + " ,");
+			}
+			*/
+			//System.out.println(it.next());
+		}
+		return msgs;
+	}
+	
+	public Vector<CommonMessage> DB_getRecvMessage(String username) throws ClassNotFoundException, SQLException {
+		Vector<String> vector = MsgDBfunc.getMsgByUserName(username, 2);
+		Vector<CommonMessage> msgs = new Vector<CommonMessage>(10, 5);
+		java.util.Iterator<String> it;
+		it = vector.iterator();
+		while(it.hasNext()) {
+			String reString = it.next();
+			String[] eleString = reString.split(":");
+			CommonMessage newMsg = new CommonMessage(eleString[1], eleString[2], eleString[3]);
+			msgs.add(newMsg);
+			/*
+			for (int i = 0; i < eleString.length; i++) {
+				System.out.print(i + " : " + eleString[i] + " ,");
+			}
+			*/
+			//System.out.println(it.next());
+		}
+		return msgs;
+	}
+	
+	public Vector<CommonMessage> DB_getAllMessage(String username) throws ClassNotFoundException, SQLException {
+		Vector<String> vector = MsgDBfunc.getMsgByUserName(username, 3);
+		Vector<CommonMessage> msgs = new Vector<CommonMessage>(10, 5);
+		java.util.Iterator<String> it;
+		it = vector.iterator();
+		while(it.hasNext()) {
+			String reString = it.next();
+			String[] eleString = reString.split(":");
+			System.out.println("***DataManager:" + reString + " : " + eleString[1]+ "," + eleString[2]
+					+ "," + eleString[3]);
+			CommonMessage newMsg = new CommonMessage(eleString[1], eleString[2], eleString[3]);
+			msgs.add(newMsg);
+			/*
+			for (int i = 0; i < eleString.length; i++) {
+				System.out.print(i + " : " + eleString[i] + " ,");
+			}
+			*/
+			//System.out.println(it.next());
+		}
+		return msgs;
+	}
+	
+	public boolean DB_newUser(String username, String password, String screenname, String mailaddr, 
+			long score, UserLevel userLevel, UserState userState) throws SQLException, ClassNotFoundException {
+		DBfunction.setMember("0", username, password, mailaddr, screenname, score, userLevel.toString(), 
+				userState.toString(), "...", "...", 1000, 0, (new java.util.Date()).toLocaleString());	
+		return true;
+	}
+	
+	public CommonUser DB_getUser(String username) throws SQLException, ClassNotFoundException {
+		/**the real get User*/
+		String password = DBfunction.getPassword(username);
+		String mail = DBfunction.getMailAddress(username);
+		CommonUser curUser = new CommonUser(username, password, mail);
+		curUser.setScreenName(DBfunction.getNickName(username));
+		curUser.setMaxTaskNum(Integer.parseInt(DBfunction.getMaxTask(username)));
+		curUser.setScore(Integer.parseInt(DBfunction.getScore(username)));
+		curUser.setUserLevel(DBfunction.getUserLevel(username) == "INIT" ? UserLevel.INIT : UserLevel.INIT);
+		curUser.setNumOfTasks(Integer.parseInt(DBfunction.getNumOfTasks(username)));
+		curUser.setUserState(UserState.ACTIVE);
+		curUser.setCreateTime((new java.util.Date()).toLocaleString());
+		String channel = DBfunction.getChannels(username);
+		if (curUser == null) {
+			return null;
+		}
+		return curUser; 
 	}
 	
 	public boolean newMessage(long msgId, CommonMessage newmsg) {

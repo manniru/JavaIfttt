@@ -8,18 +8,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.joe.ifttt.server.manager.TaskManager;
 import org.joe.ifttt.server.manager.UserManager;
-import org.joe.ifttt.server.servlet.model.SimpleUser;
 
-import sun.security.jgss.LoginConfigImpl;
+public class TaskOps extends HttpServlet {
 
-public class UserLoginServlet extends HttpServlet {
 	/**
 	 * Constructor of the object.
 	 */
-	public UserLoginServlet() {
+	public TaskOps() {
 		super();
 	}
 
@@ -44,6 +42,19 @@ public class UserLoginServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		out.print("    This is ");
+		out.print(this.getClass());
+		out.println(", using the GET method");
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
 	}
 
 	/**
@@ -58,43 +69,36 @@ public class UserLoginServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
+		Long authCode = Long.parseLong(request.getParameter("authcode"));
+		System.out.println("*********" + request.getParameter("taskid"));
+		long taskid = Long.parseLong(request.getParameter("taskid"));
+		String op = request.getParameter("ops");
 		
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		
-		SimpleUser user = new SimpleUser(username, password, null);
-		
-		HttpSession httpSession = request.getSession();
-		long userhash = -1;
-		try {
-			userhash = LoginUser(user);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (op.equals("delete")) {
+			TaskManager.getInstance().removeTaskById(taskid);
+			try {
+				UserManager.getInstance().removeTaskOfUser(authCode, taskid);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		if (userhash == -1) {
-			out.println("Password Login Error!");
+		else if (op.equals("run")) {
+			//System.out.println("***RUN IN TASKOPs");
+			TaskManager.getInstance().startTask(taskid);
 		}
-		else if (userhash == -2){
-			out.println("Username Login Error!");
+		else if (op.equals("stop")) {
+			//System.out.println("***STOP IN TASKOPs");
+			TaskManager.getInstance().stopTask(taskid);
 		}
-		else {
-			out.println("Login Success!");
-			httpSession.setAttribute("userhash", userhash);
-		}
-		out.println("current user: " + UserManager.getInstance().getNumOfUsers());
-		
+		out.println(0);
 		out.close();
-	}
-
-	private long LoginUser(SimpleUser user) throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return UserManager.getInstance().loginUser(user.getUsername(), user.getPassword());
 	}
 
 	/**

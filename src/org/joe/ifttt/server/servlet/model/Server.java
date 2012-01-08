@@ -1,9 +1,11 @@
 package org.joe.ifttt.server.servlet.model;
 
+import java.sql.SQLException;
+
 import org.joe.ifttt.server.manager.UserManager;
 
 public class Server {
-	public static long LoginUser(SimpleUser user) {
+	public static long LoginUser(SimpleUser user) throws SQLException, ClassNotFoundException {
 		// TODO Auto-generated method stub
 		return UserManager.getInstance().loginUser(user.getUsername(), user.getPassword());
 	}

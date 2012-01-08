@@ -6,7 +6,7 @@
 			+ path + "/";
 %>
 
-<%@ page import=" org.wzz.ifttt.response.Member.Login,org.wzz.ifttt.response.Member.Task"%>
+<%@ page import=" org.wzz.ifttt.response.Member.Login, org.wzz.ifttt.response.Member.Task"%>
 <!DOCTYPE html> 
 <html> 
   	<head> 
@@ -22,8 +22,14 @@
         <title>admin's Profile - ifttt</title> 
 
    		<link href="./stylesheet/index.css" media="screen" rel="stylesheet" type="text/css" /> 
-   		<script src="" type="text/javascript"></script> 
-     
+   		<script src="./script/task.js" type="text/javascript"></script> 
+   		<script src="./script/ajax.js" type="text/javascript"></script>
+		<script src="./script/validation-utils.js" type="text/javascript"></script>
+     	<script type="text/javascript">
+     		var deleteTaskRequest = createRequest();
+     		var runTaskRequest = createRequest();
+     		var stopTaskRequest = createRequest();
+     	</script> 
   		<link href="/mzd.atom" rel="alternate" title="atom" type="application/atom+xml" />  
   	</head> 
 	<body class="logged_in page-profile mine windows  env-production ">
@@ -65,23 +71,6 @@
             		<img height="46" width="96" alt="ifttt" src="./pic/logo.png"> 
          		</a> 
  				
- 				<div class="topsearch"> 
-					<form action="/search" id="top_search_form" method="get">        
-						<a href="/search" class="advanced-search tooltipped downwards" title="Advanced Search">Advanced Search</a> 
-        					<div class="search placeholder-field js-placeholder-field"> 
-          						<label class="placeholder" for="global-search-field">Search</label> 
-          							<input type="text" class="search my_repos_autocompleter" id="global-search-field" name="q" results="5" /> <input type="submit" value="Search" class="button" /> 
-        					</div> 
-        					<input type="hidden" name="type" value="Everything" /> 
-       						<input type="hidden" name="repo" value="" /> 
-        					<input type="hidden" name="langOverride" value="" /> 
-        					<input type="hidden" name="start_value" value="1" /> 
-					</form>      
-					<ul class="top-nav"> 
-          				<li class="explore"><a href="/explore">Explore</a></li> 
-        				<li><a href="/help">Help</a></li> 
-      				</ul> 
-    			</div> <!-- /.topsearch --> 
  
  				<div id="userbox"> 
     				<div id="user"> 
@@ -176,15 +165,19 @@
        					%>
 						<ul id="Task<%=i%>" class="repositories repo_list" style="display: none">
 							<li class="public source">
+								<input type="text" id="taskid<%=i%>" value="<%=task.getTaskId(i)%>" style="display:none">
 								<ul class="repo-stats">
-									<li><!-- get Tasks --></li>
+									<li><%=task.getTaskId(i) %></li>
+									<li><%=task.getThisId(i) %></li>
+									<li><%=task.getThatId(i) %></li>
+									<li><%=task.gettime(i) %></li>
 								</ul>
 								<h3>
 									<a>Test Task<%=i %></a>
 								</h3>
 								<div class="body">
-									<p class="description">
-										<!--  get Isruntask -->
+									<p class="description" id="task_state<%=i%>">
+										<%=task.getIfRun(i) %>
 									</p>
 
 									<p class="updated-at">
@@ -206,10 +199,10 @@
 											src="https://a248.e.akamai.net/assets.github.com/images/modules/dashboard/dossier/participation_legend.png?1284681402" />
 									</div>
 								</div>
-								<a href="ModifyTask.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="modify_button<%=i %>"><span>Modify</span></button></a>
-								<a href="Run.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="run_button<%=i %>"><span>Run</span></button></a>
-								<a href="Stop.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="stop_button<%=i %>"><span>Stop</span></button></a>
-								<a href="DeleteTask.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="delete_button<%=i %>"><span>Delete</span></button></a>
+								<a href="./ModifyTask.jsp?authcode=<%=authcode%>"><button type="submit" class="classy primary js-oneclick" id="modify_button<%=i %>"><span>Modify</span></button></a>
+								<button type="button" onClick="runTask(<%=i %>, <%=authcode%>);"class="classy primary js-oneclick" id="run_button<%=i %>"><span>Run</span></button>
+								<button type="button" onClick="stopTask(<%=i %>, <%=authcode%>);"class="classy primary js-oneclick" id="stop_button<%=i %>"><span>Stop</span></button>
+								<button type="button" onClick="deleteTask(<%=i %>, <%=authcode%>);"class="classy primary js-oneclick" id="delete_button<%=i %>"><span>Delete</span></button>
 								<!-- /.body -->
 							</li>
 						

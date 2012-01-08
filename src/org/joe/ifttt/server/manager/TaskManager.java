@@ -10,14 +10,20 @@ package org.joe.ifttt.server.manager;
  * implement the operations of tasks
  * process all requests about task 
  */
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.mail.MessagingException;
+
 import org.joe.ifttt.server.task.*;
 import org.joe.ifttt.server.task.action.That;
+import org.joe.ifttt.server.task.event.GetWeiboEvent;
+import org.joe.ifttt.server.task.event.MailEvent;
 import org.joe.ifttt.server.task.event.This;
+import org.joe.ifttt.server.task.event.TimeEvent;
 import org.joe.ifttt.server.type.TaskState;
 import org.joe.ifttt.server.user.CommonUser;
 
@@ -48,11 +54,55 @@ public class TaskManager {
 		tasks = new HashMap<Long, TaskFrame>(MAX_NUM_OF_TASKS);
 		currentTaskNum = new Long(0);
 	}
-	public void loadTasks () {
+	public void loadTask (long userhash, long taskid) throws SQLException, ClassNotFoundException {
+		CommonUser currentUser = UserManager.getInstance().getLoginUserByHashcode(userhash);
+		if (null != currentUser) {
+			TaskFrame task = DataManager.getInstance().DB_getTask(taskid);
+			String[] types = task.getTaskType().split("|");
+			This event;
+			That action;
+			String eChannelType = types[0].split("-")[1];
+			String eventType = types[0].split("-")[2];
+			String aChannelType = types[1].split("-")[1];
+			String actionType = types[1].split("-")[2];
+			
+			if (eChannelType.equals("time")) {
+				String time[] = task.getThisParam().split("-");
+				event = new TimeEvent(time[0], time[1], time[2], time[3], time[4]);
+				System.out.println(time[0] + "," + time[1] + "," + time[2] + "," + time[3] + "," + time[4]);
+			}
+			else if (eChannelType.equals("weibo")){
+				event = new GetWeiboEvent(task.getThisParam().split("|")[0], 
+						null, task.getThisParam().split("|")[1]);
+
+			}
+			else if (eChannelType.equals("mail")) {
+				try {
+					event = new MailEvent(currentUser);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (aChannelType.equals("weibo")) {
+				
+			}
+			else if (aChannelType.equals("mail")) {
+				
+			}
+			
+			System.out.println(eChannelType);
+			System.out.println(aChannelType);
+			//event.setChannel(currentUser.getChannel(eChannelType));
+			//action.setChannel(currentUser.getChannel(aChannelType));
+		}
 		
 	}
 	public long insertTask (long userHash, String taskname, This event, 
-			String eType, That action, String aType, boolean repeat) {
+			String eType, String thisParam, That action, String aType, 
+			String thatParam, boolean repeat) 
+					throws SQLException, ClassNotFoundException {
 		/**Insert a task to the task list, and update the database
 		 * PARAMETERS:
 		 * 		@param userHash: the hash code of the user
@@ -78,6 +128,7 @@ public class TaskManager {
 		 * */
 		CommonUser currentUser = UserManager.getInstance().getLoginUserByHashcode(userHash);
 		if (null != currentUser) {
+			
 			String eChannelType = eType.split("-")[1]; //get event channel type
 			String aChannelType = aType.split("-")[1]; //get action channel type
 			System.out.println(eChannelType);
@@ -94,8 +145,13 @@ public class TaskManager {
 			newTask.setOwner(currentUser.getUsername());
 			newTask.setRepeat(repeat);
 			newTask.setCreateTime((new Date()).toGMTString());
+			newTask.setThisParam(thisParam);
+			newTask.setThatParam(thatParam);
 			tasks.put(currentTaskNum, newTask);
-			UserManager.getInstance().getLoginUserByHashcode(userHash).getUserTask().add(currentTaskNum);
+			//DataManager.getInstance().DB_newTask(currentTaskNum, newTask, currentUser.getUsername());
+			UserManager.getInstance().addTaskOfUser(userHash, currentTaskNum);
+			//UserManager.getInstance().getLoginUserByHashcode(userHash).getUserTask().add(currentTaskNum);
+			
 			return newTask.getTaskId();
 		}
 		System.out.println("error insert");
@@ -126,7 +182,7 @@ public class TaskManager {
 			tasksEl[1+5*i] = currentTask.getTaskType().split("|")[0];
 			tasksEl[2+5*i] = currentTask.getTaskType().split("|")[1];
 			tasksEl[3+5*i] = currentTask.getCreateTime();
-			tasksEl[4+5*i] = String.valueOf(currentTask.getTaskState());
+			tasksEl[4+5*i] = currentTask.getTaskState().toString();
 			i ++;
 		}
 		return tasksEl;
@@ -168,7 +224,8 @@ public class TaskManager {
 		/**start a task*/
 		TaskFrame currentTask = tasks.get(taskId);
 		if (null != currentTask) {
-			ThreadManager.getInstance().putTaskInThreadPool(currentTask);
+			long thread_id = ThreadManager.getInstance().putTaskInThreadPool(currentTask);
+			currentTask.setThreadId(thread_id);
 			return true;
 		}
 		return false;
@@ -179,6 +236,7 @@ public class TaskManager {
 		TaskFrame currentTask = tasks.get(taskId);
 		if (currentTask != null) {
 			long threadId = currentTask.getThreadId();
+			
 			ThreadManager.getInstance().removeTaskByIdFromThreadPool(threadId);
 			currentTask.setTaskState(TaskState.PAUSE);
 			return true;
@@ -191,6 +249,7 @@ public class TaskManager {
 		TaskFrame currentTask = tasks.get(taskId);
 		if (currentTask != null) {
 			long threadId = currentTask.getThreadId();
+			System.out.println("****thread id" + threadId);
 			ThreadManager.getInstance().removeTaskByIdFromThreadPool(threadId);
 			currentTask.setTaskState(TaskState.STOP);
 			return true;

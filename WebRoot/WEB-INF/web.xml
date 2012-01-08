@@ -65,6 +65,20 @@
     <servlet-name>UpdateMessages</servlet-name>
     <servlet-class>org.joe.ifttt.server.servlet.UpdateMessages</servlet-class>
   </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>GetMessages</servlet-name>
+    <servlet-class>org.joe.ifttt.server.servlet.GetMessages</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>TaskOps</servlet-name>
+    <servlet-class>org.joe.ifttt.server.servlet.TaskOps</servlet-class>
+  </servlet>
+
+
 
 
 
@@ -114,6 +128,14 @@
   <servlet-mapping>
     <servlet-name>UpdateMessages</servlet-name>
     <url-pattern>/servlet/UpdateMessages</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetMessages</servlet-name>
+    <url-pattern>/servlet/GetMessages</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TaskOps</servlet-name>
+    <url-pattern>/servlet/TaskOps</url-pattern>
   </servlet-mapping>	
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

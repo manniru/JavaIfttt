@@ -12,7 +12,7 @@
   	<head> 
 		<meta charset='utf-8'> 
 		<meta http-equiv="X-UA-Compatible" content="chrome=1"> 
-		<title>Sign up for ifttt - ifttt</title>  
+		<title>Modify Your Info - ifttt</title>  
 
 		<link href="./stylesheet/index.css" media="screen" rel="stylesheet" type="text/css" /> 
 
@@ -56,20 +56,11 @@
         <div class="site"> 
           	<div class="container"> 
             	<div class="pagehead"> 
-    				<h1>Sign up for ifttt</h1> 
+    				<h1>Modify Your Info</h1> 
     				<ul class="pagehead-actions"> 
       					<!-- <li><a href="./login.html" class="minibutton btn-log-in-to-an-existing-account "><span><span class="icon"></span>Log in to an existing account</span></a></li> --> 
     				</ul> 
 				</div> 
- 
-  				<div class="plan hplan final free"> 
-          			<div class="price"> 
-        				<span class="symbol">$</span><span class="amount">0</span><span class="duration">/month</span> 
-      				</div> 
- 
-    				<h3>You are signing up for the <strong>free</strong> account</h3> 
-    				<p>The cost for this account is <strong>$0 per month</strong>. You can cancel, downgrade, or upgrade at any time.</p> 
-  				</div> 
  
 				<div class="columns equacols bordered"> 
   					<div class="column main"> 

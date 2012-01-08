@@ -1,4 +1,12 @@
 package org.wzz.ifttt.response.Member;
+
+import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.Vector;
+
+import org.joe.ifttt.server.manager.UserManager;
+import org.joe.ifttt.server.user.CommonMessage;
+
 /**
  * TODO:
  *	getMessageCountByAuthcode
@@ -17,19 +25,31 @@ public class Message {
 		messageSender = new String[MAXLENGTH];
 	}
 	
-	public int getMessageCountByAuthcode(long authcode) {
-		messageCount = 1;//Wei
+	public int getMessageCountByAuthcode(long authcode) 
+			throws ClassNotFoundException, SQLException {
+		messageCount = (UserManager.getInstance().getMessages(authcode, 1)).size();//Wei
 		return messageCount;
 	}
 	
-	public void setDataByAuthcode(long authcode) {
+	public void setDataByAuthcode(long authcode) throws ClassNotFoundException, SQLException {
+		Vector<CommonMessage> msgs = UserManager.getInstance().getMessages(authcode, 1);
+		Iterator<CommonMessage> it = msgs.iterator();
+		int i = 0;
+		while (it.hasNext()) {
+			CommonMessage msg = it.next();
+			System.out.println("***In" + msg.getSenderString() + msg.getContent());
+			message[i] = "FROM: " + msg.getSenderString() + "  TO: " + msg.getReceiverString();
+			messageSender[i] = msg.getContent();
+			i ++ ;
+		}
+		/*
 		String[] tempSet = null;
 		//Wei TODO~~~~
 		for(int i=0;i<messageCount;i++) {
 			message[i] = tempSet[0+2*i];
-			messageSender[i] = tempSet[1+5*i];
-			
-		}
+			messageSender[i] = tempSet[1+2*i];
+		
+		}*/
 	}
 	
 	public String getMessage(int i) {

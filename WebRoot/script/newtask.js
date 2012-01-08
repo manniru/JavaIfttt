@@ -43,7 +43,7 @@ function addTimeEventToRight() {
 	timeEventLogo.style.display = 'inline';
 	timeEventForm.style.display = 'inline';
 	thisTypeEl.value = "time-after";
-	ajaxThisForm.submit();
+	//ajaxThisForm.submit();
 
 }
 
@@ -70,8 +70,7 @@ function addWeiboEventToRight() {
 	weiboEventLogo.style.display = 'inline';
 	weiboEventForm.style.display = 'inline';
 	thisTypeEl.value = "weibo-update";
-	ajaxThisForm.submit();
-
+	//ajaxThisForm.submit();
 }
 
 function addGmailEventToRight() {
@@ -96,7 +95,7 @@ function addGmailEventToRight() {
 	gmailEventLogo.style.display = 'inline';
 	gmailEventForm.style.display = 'inline';
 	thisTypeEl.value = "gmail-receive";
-	ajaxThisForm.submit();
+	//ajaxThisForm.submit();
 }
 
 

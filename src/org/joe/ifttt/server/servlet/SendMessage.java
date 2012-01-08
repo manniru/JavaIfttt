@@ -2,6 +2,7 @@ package org.joe.ifttt.server.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -73,8 +74,18 @@ public class SendMessage extends HttpServlet {
 		//get the new message
 		String receiver = request.getParameter("reciever");
 		String message = request.getParameter("message");
-		Long authCode = Long.parseLong(request.getParameter("authCode"));
-		UserManager.getInstance().sendMessgaeTo(authCode.longValue(), receiver, message);
+		System.out.println("**********" + request.getParameter("authcode") + "send message");
+		Long authCode = Long.parseLong(request.getParameter("authcode"));
+		System.out.println("**********" + authCode + "send message");
+		try {
+			UserManager.getInstance().sendMessgaeTo(authCode.longValue(), receiver, message);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//reflesh the list of the messages
 		System.out.println("receiver:" + receiver + "message:" + message);

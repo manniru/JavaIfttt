@@ -2,6 +2,7 @@ package org.joe.ifttt.server.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -103,8 +104,17 @@ public class CreateTaskServlet extends HttpServlet {
 		String[] time = params[1].split(":");
 		TimeEvent timeEvent = new TimeEvent(date[0], date[1], date[2], time[0], time[1]);
 		UpdateWeiboAction weiboAction = new UpdateWeiboAction(content);
-		long taskId = TaskManager.getInstance().insertTask(task.getAuthcode(), task.getTaskname(), 
-				timeEvent, "EVENT-time-after", weiboAction, "ACTION-weibo-update", false);
+		try {
+			long taskId = TaskManager.getInstance().insertTask(task.getAuthcode(), task.getTaskname(), 
+					timeEvent, "EVENT-time-after", params[0] + "|" + params[1],
+					weiboAction, "ACTION-weibo-update", params[2], false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		out.println("taskname : " + task.getTaskname() + "\n" 
 				  + "date : " + 	params[0] + "\n"

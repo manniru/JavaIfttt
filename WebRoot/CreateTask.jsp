@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		if(request.getParameter("that[type]").equals("weibo-update")) {
   			thatDescription = request.getParameter("weibo_action[name]") + "#&#" + request.getParameter("weibo_action[keyword]") + "#&#" + request.getParameter("weibo_action[data]");
   		}
-  		else thatDescription = request.getParameter("gmail_action[name]") + "#&#" + request.getParameter("gmail_action[password]") + "#&#" + request.getParameter("gmail_action[data]");
+  		else thatDescription = request.getParameter("gmail_action[name]") + "#&#" + request.getParameter("gmail_action[password]") + "#&#" + request.getParameter("gmail_action[data]") + "#&#" + request.getParameter("gmail_action[receive]");
   		task.createTask(Long.parseLong(request.getParameter("authcode")),request.getParameter("task[name]"),request.getParameter("task[description]"),thisDescription,request.getParameter("this[type]"),thatDescription,request.getParameter("that[type]"),false);
   	%>
   <body>

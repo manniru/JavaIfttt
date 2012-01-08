@@ -23,6 +23,8 @@ public class TaskFrame implements This, That{
 	private String	 	taskType;
 	private This 		trigger;
 	private That 		action;
+	private String		thisParam;
+	private String		thatParam;
 	private String		owner;
 	private boolean		repeat;
 	private String 		createTime;
@@ -119,5 +121,21 @@ public class TaskFrame implements This, That{
 
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getThisParam() {
+		return thisParam;
+	}
+
+	public void setThisParam(String thisParam) {
+		this.thisParam = thisParam;
+	}
+
+	public String getThatParam() {
+		return thatParam;
+	}
+
+	public void setThatParam(String thatParam) {
+		this.thatParam = thatParam;
 	}
 }

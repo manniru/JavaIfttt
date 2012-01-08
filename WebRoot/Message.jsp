@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
    		<link href="./stylesheet/index.css" media="screen" rel="stylesheet" type="text/css" /> 
    		<script src="" type="text/javascript"></script> 
-   		<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js'></script>
+     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js'></script>
 		<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/scriptaculous/1/scriptaculous.js'></script>
 		<script type='text/javascript' src='./lightview/js/lightview.js'></script>
 		<script type='text/javascript' src='./lightview/js/scriptaculous.js?load=effects'></script>
@@ -30,14 +30,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript">
 			var msgRequest = createRequest();
 		</script> 
-		
 		<link rel="stylesheet" type="text/css" href="./lightview/css/lightview.css" />
      
   		<link href="/mzd.atom" rel="alternate" title="atom" type="application/atom+xml" />  
   	</head> 
-	<body class="logged_in  windows  env-production">
-		
-		 <form id="ajax_message_form" style="display:none;">
+	<body class="logged_in page-profile mine windows  env-production ">
+  		
+  		<form id="ajax_message_form" style="display:none;">
 			<h2>
     			Send A Message
   			</h2> 
@@ -65,10 +64,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			</div> 
 			<input value="Send" id="ajaxSubmit" class = "classy primary js-oneclick" type="button" onClick="sendMessage();">
 		</form>
-  		
   		<% long authcode = Long.parseLong(request.getParameter("authcode")); 
   			Login login = new Login();
   			Message message = new Message();
+  			message.setDataByAuthcode(authcode);
   		%>
 	    <div id="header" class="true clearfix"> 
         	<div class="container" class="clearfix"> 
@@ -112,10 +111,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   				</div> <!-- /.userbox -->
         	</div> 
       	</div> <!-- header --> 
-  		
-
-		
-		
+  
         <div class="site"> 
           	<div class="container"> 
 				<div class="pagehead userpage" data-name="admin"> 
@@ -146,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     				<div class="last"> 
       					<ul class="stats"> 
         				<li> 
-          				<a href="/admin/messages"> 
+          				<a href="/admin/tasks"> 
             				<strong><%=message.getMessageCountByAuthcode(authcode) %></strong> 
             				<span>Message</span> 
           				</a> 
@@ -169,20 +165,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       					<h2> 
          					Message <em>(<%=message.getMessageCountByAuthcode(authcode)%>)</em> 
       					</h2>
-      					<div class="signup-entice">
+<div class="signup-entice">
       					      <a href="#ajax_message_form" class="lightview signup-button" title=' :: :: topclose: true, autosize: true'>Send Message</a>
-						
- 						</div> 
- 
-      					<div class="filter-bar"> 
+
+ 						</div>       					<div class="filter-bar"> 
         					<div class="placeholder-field js-placeholder-field"> 
           						<label class="placeholder" for="your-repos-filter" style="display: block; ">Find a repositorya</label> 
           						<input type="text" id="your-repos-filter" class="filter_input"> 
         					</div> 
         					<ul class="repo_filterer"> 
           						<li class="all_repos"><a class="repo_filter filter_selected" rel="active, unactive" onclick="<%for(int j=0;j<message.getMessageCountByAuthcode(authcode);j++) {%>document.getElementById('Message<%=j%>').style.display='inline';<%}%>"> All Messages</a></li>
-            					<li><a href="#" class="repo_filter" rel="active">Private</a></li> 
-            					<li><a href="#" class="repo_filter" rel="unactive">Public</a></li>
+            					<li><a href="javascript:filter();" class="repo_filter" rel="active">Send</a></li> 
+            					<li><a href="javascript:filter();" class="repo_filter" rel="unactive">Recieve</a></li>
         					</ul> 
       					</div>
       					<%
@@ -191,14 +185,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<ul id="Message<%=i%>" class="repositories repo_list" style="display: none">
 							<li class="public source">
 								<ul class="repo-stats">
-									<li><!-- get Tasks -->Sender:System Message:Welcome</li>
+									<li><%=message.getMessage(i) %></li>
 								</ul>
 								<h3>
 									<a>Message<%=i %></a>
 								</h3>
 								<div class="body">
 									<p class="description">
-										<!--  get Isruntask -->
+										<%=message.getMessageSender(i) %>
 									</p>
 
 									<p class="updated-at">
@@ -243,7 +237,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										<div class="details"> 
 											
 										</div> <!-- details --> 
-									</div><!-- body -->
+									</div>
 								</div> 
 
  
@@ -300,7 +294,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      			 		<ul>
           					<a href="./privacy.html">Privacy</a>  
       					</ul>
-      					<p>脗漏 2011 <span id="_rrt">TWW</span> All rights reserved.</p>
+      					<p>Â© 2011 <span id="_rrt">TWW</span> All rights reserved.</p>
    	 				</div>
   			 	</div>
 			</div><!-- ./lower_footer -->

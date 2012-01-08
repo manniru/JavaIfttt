@@ -4,30 +4,70 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+/**
+ * 2011/12/28 1:53 add the functions:
+ * 		setUserAccount
+ * 		getUserAccount
+ * 
+ * 2012/01/02 0:44
+ * 		debug some functions, do after close
+ * 		
+ * */
 
 public class DBfunction {	
+	
+	//取得用户账户信息
+	public static int getUserAccount(String UserName) throws ClassNotFoundException, SQLException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select Account from useraccount where UserName = '" + UserName + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString,statement);
+		while(tempSet.next()) {
+			int resultString = Integer.parseInt(tempSet.getString(1));
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return -1;
+	}
+	//添加用户账户信息
+	public static boolean setUserAccount(String UserName, int account) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "Select UserName from member where UserName='" + UserName + "'";
+		ResultSet resultset = SQLconn.SQLexe(ExeString, statement);
+		if(resultset.next()==false) {
+			return false;
+		}
+		String insertString = "INSERT INTO USERACCOUNT VALUES('" + UserName + "'," + account + ")";
+		SQLconn.SQLupdate(insertString, statement);
+		statement.close();
+		return true;
+	}
+	
 	//用户昵称返回接口
 	public static String getNickName(String Id) throws SQLException, ClassNotFoundException {
 		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select MemberName from Member where UserName = '" + Id + "'";
+		String ExeString = "select NickName from Member where UserName = '" + Id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString,statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String result = tempSet.getString(1);
+			statement.close();
+			return result;
 		}
+		statement.close();
 		return null;
 	}
 	
 	//用户密码返回接口
 	public static String getPassword(String Id) throws SQLException, ClassNotFoundException {
 		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select MemberKey from Member where UserName = '" + Id + "'";
+		String ExeString = "select Password from Member where UserName = '" + Id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString,statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String result = tempSet.getString(1);
+			statement.close();
+			return result;
 		}
+		statement.close();
 		return null;
 	}
 	
@@ -48,10 +88,12 @@ public class DBfunction {
 		Statement statement = SQLconn.initialMySQL();
 		String ExeString = "select MailAddress from Member where UserName = '" + Id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
 		}
+		statement.close();
 		return null;
 	}
 	
@@ -60,22 +102,27 @@ public class DBfunction {
 		Statement statement = SQLconn.initialMySQL();
 		String ExeString = "select UserLevel from Member where UserName='" + id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
+		
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
 		}
+		statement.close();
 		return null;
 	}
 
 	//获取会员积分
 	public static String getScore(String id) throws SQLException, ClassNotFoundException {
 		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select Score from Member where MemberId='" + id + "'";
+		String ExeString = "select Score from Member where UserName='" + id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
 		}
+		statement.close();
 		return null;
 	}
 	
@@ -84,10 +131,12 @@ public class DBfunction {
 		Statement statement = SQLconn.initialMySQL();
 		String ExeString = "select UserState from Member where UserName = '" + Id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
 		}
+		statement.close();
 		return null;
 	}
 	
@@ -96,10 +145,12 @@ public class DBfunction {
 		Statement statement = SQLconn.initialMySQL();
 		String ExeString = "select Channels from Member where UserName = '" + Id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
 		}
+		statement.close();
 		return null;
 	}
 	
@@ -108,10 +159,12 @@ public class DBfunction {
 		Statement statement = SQLconn.initialMySQL();
 		String ExeString = "select Tasks from Member where UserName = '" + Id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
 		}
+		statement.close();
 		return null;
 	}
 	
@@ -120,10 +173,12 @@ public class DBfunction {
 		Statement statement = SQLconn.initialMySQL();
 		String ExeString = "select MaxTask from Member where UserName = '" + Id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
 		}
+		statement.close();
 		return null;
 	}
 	
@@ -132,125 +187,18 @@ public class DBfunction {
 		Statement statement = SQLconn.initialMySQL();
 		String ExeString = "select NumOfTasks from Member where UserName = '" + Id + "'";
 		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
 		while(tempSet.next()) {
-			return tempSet.getString(1);
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
 		}
+		statement.close();
 		return null;
 	}
-	
-	//获取一个任务的创建时间接口
-	public static String getCreateTime(long Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select CreateTime from Task where TaskId = '" + (int)Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-	
-	//获取一个任务编号
-	public static String getTaskId(String Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select TaskId from Task where UserName = '" + Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-
-	//获取任务名
-	public static String getTaskName(long Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select TaskName from Task where TaskId = '" + (int)Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-	
-	//获取任务状态
-	public static String getTaskState(long Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select TaskState from Task where TaskId = '" + (int)Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-	
-	//获取任务类型
-	public static String getTaskType(long Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select TaskTpye from Task where TaskId = '" + (int)Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-	
-	//获取任务This描述
-	public static String getTrigger(long Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select Trigger from Task where TaskId = '" + (int)Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-	
-	//获取任务That描述
-	public static String getAction(long Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select Action from Task where TaskId = '" + (int)Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-	
-	//获取任务的执行用户
-	public static String getOwner(long Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select UserName from Task where TaskId = '" + (int)Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-	
-	//获取是否重复执行接口
-	public static String getRepeat(long Id) throws SQLException, ClassNotFoundException {
-		Statement statement = SQLconn.initialMySQL();
-		String ExeString = "select Repeat from Task where TaskId = '" + (int)Id + "'";
-		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
-		statement.close();
-		while(tempSet.next()) {
-			return tempSet.getString(1);
-		}
-		return null;
-	}
-	
 	//更新Member表
 	public static boolean setMember(String ManagerPassword,String UserName,String Password,String MailAddress,String NickName,long Score,String UserLevel,String UserState,String Channels,String Tasks,int MaxTask,int NumOfTasks,String date) throws SQLException, ClassNotFoundException {
 		if(UserName==null) return false;
-		else {
+		else {	
 			Statement statement = SQLconn.initialMySQL();
 			String ExeString = "Select UserName from Member where UserName='" + UserName + "'";
 			ResultSet resultset = SQLconn.SQLexe(ExeString, statement);
@@ -278,7 +226,7 @@ public class DBfunction {
 				}
 				if(MailAddress!=null) {
 					String ExeStringB3 = "update Member set MailAddress = '" + MailAddress + "'" + "where UserName = '" + UserName + "'";
-					SQLconn.SQLupdate(ExeStringB3, statement);
+						SQLconn.SQLupdate(ExeStringB3, statement);
 				}
 				if(UserState!=null) {
 					String ExeStringB4 = "update Member set UserState = '" + UserState + "'" + "where UserName = '" + UserName + "'";
@@ -313,6 +261,137 @@ public class DBfunction {
 			}
 		}
 	}
+	
+	
+	/**
+	 * the ops of Task table 
+	 * */
+	//获取一个任务的创建时间接口
+	public static String getCreateTime(long Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select CreateTime from Task where TaskId = '" + (int)Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+	
+	//获取一个任务编号
+	public static String getTaskId(String Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select TaskId from Task where UserName = '" + Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+
+	//获取任务名
+	public static String getTaskName(long Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select TaskName from Task where TaskId = '" + (int)Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+	
+	//获取任务状态
+	public static String getTaskState(long Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select TaskState from Task where TaskId = '" + (int)Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+	
+	//获取任务类型
+	public static String getTaskType(long Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select TaskTpye from Task where TaskId = '" + (int)Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+	
+	//获取任务This描述
+	public static String getTrigger(long Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select Trigger from Task where TaskId = '" + (int)Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+	
+	//获取任务That描述
+	public static String getAction(long Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select Action from Task where TaskId = '" + (int)Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+	
+	//获取任务的执行用户
+	public static String getOwner(long Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select UserName from Task where TaskId = '" + (int)Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+	
+	//获取是否重复执行接口
+	public static String getRepeat(long Id) throws SQLException, ClassNotFoundException {
+		Statement statement = SQLconn.initialMySQL();
+		String ExeString = "select Repeat from Task where TaskId = '" + (int)Id + "'";
+		ResultSet tempSet = SQLconn.SQLexe(ExeString, statement);
+		while(tempSet.next()) {
+			String resultString = tempSet.getString(1);
+			statement.close();
+			return resultString;
+		}
+		statement.close();
+		return null;
+	}
+	
 	
 	//更新Task表
 	public static boolean setTask(String ManagerPassword,long TaskId,String TaskName,String TaskState,String TaskType,String Trigger,String Action,String UserName,int Repeat,String date) throws SQLException, ClassNotFoundException {

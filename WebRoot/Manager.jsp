@@ -25,8 +25,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	</head> 
 	<body class="logged_in page-profile mine windows  env-production ">
 		<%
+			System.out.println("AUTH CODE = " + request.getParameter("authcode"));
 			if(!request.getParameter("authcode").equals("1")) {
-		%> <jsp:forward page="IFTTT_Login_Error.jsp"></jsp:forward>
+		%> <jsp:forward page="Login_Error.jsp"></jsp:forward>
 		
 		<%	} 
 			long authcode = Long.parseLong(request.getParameter("authcode"));

@@ -18,7 +18,15 @@ import org.joe.ifttt.server.type.UserLevel;
 import org.joe.ifttt.server.user.ChannelUser;
 import org.joe.ifttt.server.user.CommonUser;
 
+import com.sun.jndi.url.ldaps.ldapsURLContextFactory;
+import com.sun.org.apache.bcel.internal.generic.NEW;
+/**
+ *  * 2011/12/28 1:33 add the functions:
+ * 		runTask
+ * 		stopTask
+ * */
 public class Task {
+	private final static int MAX_TASK_NUM = 10;
 	private String userName;
 	private long authCode;
 	private int taskCount;
@@ -30,13 +38,26 @@ public class Task {
 	private static int MAXLENGTH=100;
 	
 	public Task() {
-		
+		TaskId = new String[MAX_TASK_NUM];
+		ThisId = new String[MAX_TASK_NUM];
+		ThatId = new String[MAX_TASK_NUM];
+		time = new String[MAX_TASK_NUM];
+		IfRun = new String[MAX_TASK_NUM];
 	}
 	
+	public boolean runTask(long authcode, long taskId) {
+		return true;
+	}
+	
+	public boolean stopTask(long authcode, long taskId) {
+		return true;
+	}
 	
 	public int getTaskCountByAuthcode(long authcode) {
+		
 		taskCount = 3;/*need to add the impl to get the count of the task*/
-		return taskCount;
+		int tasknum = UserManager.getInstance().getLoginUserByHashcode(authcode).getUserTask().size();
+		return tasknum;
 	}
 	
 	public void setUserName(String id) {
@@ -44,7 +65,8 @@ public class Task {
 	}
 	
 	public void createTask(long authCode, String taskname, String taskDscrip, String thisDscrip, 
-			String thisType, String thatDscrip, String thatType, boolean repeat) {
+			String thisType, String thatDscrip, String thatType, boolean repeat) 
+					throws SQLException, ClassNotFoundException {
 		/**
 		 * thisType: time-after,
 		 * thisDscrip: 
@@ -56,8 +78,10 @@ public class Task {
 		That action = null;
 		String thisTypeString = "";
 		String thatTypeString = "";
+		String thisParams = "";
+		String thatParams = "";
 		CommonUser currentUser = UserManager.getInstance().getLoginUserByHashcode(authCode);
-		String[] thisPara = thisDscrip.split("#$#");
+		String[] thisPara = thisDscrip.split("#&#");
 		String[] thatPara = thatDscrip.split("#&#");
 		
 		if (thisType.equals("time-after")) {
@@ -65,10 +89,13 @@ public class Task {
 			event = new TimeEvent(time[0], time[1], time[2], time[3], time[4]);
 			System.out.println(time[0] + "," + time[1] + "," + time[2] + "," + time[3] + "," + time[4]);
 			thisTypeString = "EVENT-time-after";
+			thisParams = thisParams + thisPara[0];
 		}
 		else if (thisType.equals("weibo-update")) {
+		
 			event = new GetWeiboEvent(thisPara[0], null, thisPara[1]);
 			thisTypeString = "EVENT-weibo-get";
+			thisParams = thisParams + thisPara[0];
 		}
 		else if (thisType.equals("email-receive")) {
 			try {
@@ -91,9 +118,10 @@ public class Task {
 			content.setTextString(thatPara[2]);
 			action = new UpdateWeiboAction(currentUser, content);
 			thatTypeString = "ACTION-weibo-update";
-			
+			thatParams = thatParams + thatPara[2];
+			System.out.println("***IN TASK.java, thatParams :" + thatParams);
 		}
-		else if (thatType.equals("email-send")) {
+		else if (thatType.equals("gmail-send")) {
 			CommonContent content = new CommonContent();
 			ChannelUser mailUser = new ChannelUser();
 			mailUser.setUsername(thatPara[0]);
@@ -103,17 +131,20 @@ public class Task {
 			content.setTextString(thatPara[2]);
 			action = new SendMailAction(currentUser, content, thatPara[3]);
 			thatTypeString = "ACTION-mail-send";
+			thatParams = thatParams + thatPara[2] + "|" + thatPara[3];
 		}
 		System.out.println("A NEW TASK: thisType: " + thisTypeString + "thatType: " + thatTypeString);
 		long taskId = TaskManager.getInstance().insertTask(
-				authCode, taskname, event, thisTypeString, action, thatTypeString, repeat);
-		TaskManager.getInstance().startTask(taskId);
-		
-		
+				authCode, taskname, event, thisTypeString, thisParams, 
+				action, thatTypeString, thatParams, repeat);
+		//TaskManager.getInstance().startTask(taskId);
 	}
 	public void getMemberTask(long code) throws ClassNotFoundException, SQLException {
+		System.out.println("**in get member task func");
 		String[] temp = TaskManager.getInstance().getTasksByUser(code);
+		
 		int tasknum = UserManager.getInstance().getLoginUserByHashcode(code).getUserTask().size();
+		
 		for(int i = 0; i < tasknum; i++) {
 			TaskId[i] = temp[0+5*i];
 			ThisId[i] = temp[1+5*i];
@@ -140,7 +171,12 @@ public class Task {
 	}
 	
 	public String getIfRun(int i) {
-		if(IfRun[i].equals("0")) return "Unactive";
-		else return "Active";
+		String state = IfRun[i];
+		if (state.equals("RUN")) {
+			return "ACTIVE : " + "RUN";
+		}
+		else {
+			return "UNACTIVE : " + IfRun[i];
+		}
 	}
 }

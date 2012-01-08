@@ -40,6 +40,7 @@ public class CommonUser {
 		this.mailAddress = mail;
 		this.numOfTasks = 0;
 		this.userTask = new Vector<Long>(MAX_TASK);
+		this.channelMap = new HashMap<String, Channel>(MAX_CHANNEL);
 	}
 	public CommonUser(String un, String psw, String maddr, 
 			long sc, UserLevel ul, UserState us) {
@@ -80,6 +81,9 @@ public class CommonUser {
 		return channelMap.get(channelKey);
 	}
 	public void setChannel (String key, Channel channel) {
+		if (channelMap == null) {
+			System.out.println("SET CHANNEL : !!NULL");
+		}
 		channelMap.put(key, channel);
 	}
 	

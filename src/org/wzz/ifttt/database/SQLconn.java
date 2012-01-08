@@ -11,7 +11,7 @@ public class SQLconn {
 	
 	public static Statement initialMySQL() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		java.sql.Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/ifttt_database", "root", "*");
+		java.sql.Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/ifttt_database", "root", "19910111");
 		Statement statement = connection.createStatement();
 		return statement;
 	}

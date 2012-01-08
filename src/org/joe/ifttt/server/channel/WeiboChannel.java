@@ -50,7 +50,9 @@ public class WeiboChannel extends Channel{
 		this.user.setUsername(user.getUsername());
 		this.user.setPassword(user.getPassword());
 	}
-	
+	public ChannelUser getUser() {
+		return this.user;
+	}
 	public void write(CommonContent content) {
 		/**input the content*/
 		if (content.getTextString() != null) {

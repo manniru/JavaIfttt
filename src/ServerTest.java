@@ -15,7 +15,7 @@ public class ServerTest {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+/*
 		UserManager.getInstance().createUser("tong", "111", "kakak","t@w.com");
 		long authCode = UserManager.getInstance().loginUser("tong", "111");
 		
@@ -43,6 +43,6 @@ public class ServerTest {
 	//	TimeEvent timeEvent = new TimeEvent("2011", "12", "10", "17", "00");	
 		TaskManager.getInstance().startTask(taskId1);
 		TaskManager.getInstance().startTask(taskId2);
-		
+		*/
 	}
 }

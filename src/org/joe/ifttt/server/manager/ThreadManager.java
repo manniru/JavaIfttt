@@ -23,7 +23,7 @@ public class ThreadManager {
 	private static ThreadManager _manager = null;
 	private static int instanceNum = 0;
 	private ExecutorService executor;
-	private Map<Long, Thread> threads;
+	private Map<Long, Activator> threads;
 	
 	public static ThreadManager getInstance() {
 		/**get instance of thread manager*/
@@ -39,7 +39,7 @@ public class ThreadManager {
 	
 	protected ThreadManager() {
 		 executor = Executors.newFixedThreadPool(MAX_THREAD/100);
-		 threads = new HashMap<Long, Thread>(MAX_THREAD);
+		 threads = new HashMap<Long, Activator>(MAX_THREAD);
 	}
 	
 	public long putTaskInThreadPool(TaskFrame task) {
@@ -49,7 +49,7 @@ public class ThreadManager {
 		if (threads.size() >= MAX_THREAD) {
 			return -1;
 		}
-		Thread thread = new Thread(new Activator(task));
+		Activator thread = new Activator(task);
 		thread.start();
 		threads.put(thread.getId(), thread);
 		return thread.getId();
@@ -57,9 +57,10 @@ public class ThreadManager {
 	
 	public boolean removeTaskByIdFromThreadPool(long threadId) {
 		/**remove a task from the thread pool*/
-		Thread currentThread = threads.get(threadId);
+		Activator currentThread = threads.get(threadId);
 		if (currentThread != null) {
-			currentThread.stop();
+			currentThread.done();
+			//currentThread.interrupt();
 			threads.remove(threadId);
 			return true;
 		}

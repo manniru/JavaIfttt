@@ -3,10 +3,17 @@ package org.joe.ifttt.server;
 import org.joe.ifttt.server.manager.TaskManager;
 import org.joe.ifttt.server.task.TaskFrame;
 
-public class Activator implements Runnable {
+public class Activator extends Thread {
 	private TaskFrame task;
 	private int oknok = 1;
+	private boolean flag = false;
 
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+	public void done() {
+		this.flag = true;
+	}
 	public Activator() {
 		// TODO Auto-generated constructor stub
 	}
@@ -14,11 +21,12 @@ public class Activator implements Runnable {
 		this.task = task;
 	}
 	public void run() {
-		while (oknok == 1) {
+		while (!flag) {
 			if (task.thisEvent()) {
 				task.thatAction();
 				if (!task.isRepeat()) {
 					TaskManager.getInstance().doneTask(task.getTaskId());
+					this.flag = true;
 				}
 			}
 			try {

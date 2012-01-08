@@ -2,11 +2,14 @@ package org.wzz.ifttt.response.Member;
 
 
 
+import java.sql.SQLException;
+
 import org.joe.ifttt.server.manager.UserManager;
 
 
 public class Register {
-	public void Store_Data(String id, String userName, String key, String email) {
+	public void Store_Data(String id, String userName, String key, String email) 
+			throws SQLException, ClassNotFoundException {
 		UserManager.getInstance().createUser(id, key, userName, email);
 		
 		/*

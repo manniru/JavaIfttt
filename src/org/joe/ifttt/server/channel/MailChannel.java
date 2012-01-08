@@ -40,7 +40,6 @@ public class MailChannel extends Channel{
 		/**the default constructor*/
 		super.setChannelType(ChannelType.MAIL);
 	}
-	
 	public MailChannel(ChannelUser user) {
 		/**the constructor with parameter user*/
 		super.setChannelType(ChannelType.MAIL);

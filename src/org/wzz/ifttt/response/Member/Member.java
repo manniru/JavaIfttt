@@ -3,6 +3,7 @@ package org.wzz.ifttt.response.Member;
 public class Member {
 	private long authCode;
 	private int memberCount;
+	private int account;
 	private String[] userName;
 	private String[] nickName;
 	private String[] mailAddress;
@@ -71,5 +72,13 @@ public class Member {
 
 	public void setAuthCode(long authCode) {
 		this.authCode = authCode;
+	}
+
+	public int getAccount() {
+		return account;
+	}
+
+	public void setAccount(int account) {
+		this.account = account;
 	}
 }

@@ -20,6 +20,8 @@ package org.joe.ifttt.server.manager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.Vector;
 
 import org.joe.ifttt.server.GlobalFunctions;
 import org.joe.ifttt.server.channel.Channel;
@@ -30,6 +32,7 @@ import org.joe.ifttt.server.type.UserState;
 import org.joe.ifttt.server.user.ChannelUser;
 import org.joe.ifttt.server.user.CommonMessage;
 import org.joe.ifttt.server.user.CommonUser;
+import org.wzz.ifttt.database.DBfunction;
 
 public class UserManager {
 	/**The manager to manage the users*/
@@ -60,7 +63,7 @@ public class UserManager {
 		currentLoginUsers = new Long(0);
 	}
 	
-	public boolean createUser(String un, String psw, String sn, String maddr) {
+	public boolean createUser(String un, String psw, String sn, String maddr) throws SQLException, ClassNotFoundException {
 		/**create a new user*/
 		if (null == un || null == psw) {
 			System.out.println("username != null and password !=null");
@@ -69,9 +72,13 @@ public class UserManager {
 		if (!GlobalFunctions.isLegalUsername(un)) {
 			return false;
 		}
-		
+		/*
 		boolean newUser = DataManager.getInstance().
 				newUser(un, psw, sn, maddr, 0, UserLevel.INIT, UserState.ACTIVE);
+				*/
+		boolean newUser = DataManager.getInstance().DB_newUser(un, 
+				psw, sn, maddr, 0, UserLevel.INIT, UserState.ACTIVE);
+		
 		if (!newUser) {
 			return false;
 		}
@@ -80,7 +87,7 @@ public class UserManager {
 		return true;
 	}
 	
-	public long loginUser (String un, String psw) {
+	public long loginUser (String un, String psw) throws SQLException, ClassNotFoundException {
 		/** login the user
 		 * PARAMETERS:
 		 * 		un	: user name
@@ -96,15 +103,10 @@ public class UserManager {
 		//CommonUser currentUser = users.get(un);
 		//user get User test
 		CommonUser currentUser = null;
-		try {
-			currentUser = DataManager.getInstance().getUserTest(un);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		currentUser = DataManager.getInstance().DB_getUser(un);
+		/* for test, user memory
+		 * currentUser = DataManager.getInstance().getUserTest(un);
+		 */
 		
 		if (null != currentUser) {
 			if (currentUser.getPassword().equals(psw)) { //never to use "==", gosh!
@@ -190,6 +192,7 @@ public class UserManager {
 			return false;
 		}
 		Channel newChannel = null;
+		System.out.println("addChannel*****channel type" + chanType);
 		if (chanType.equals("mail")) {
 			newChannel = new MailChannel(chanUser);
 		}
@@ -200,7 +203,7 @@ public class UserManager {
 		return true;
 	}
 	
-	public boolean sendMessgaeTo (long userHash, String receiver, String content) {
+	public boolean sendMessgaeTo (long userHash, String receiver, String content) throws SQLException, ClassNotFoundException {
 		/*send a message to receiver*/
 		CommonUser currentUser = loginUsers.get(userHash);
 		if (currentUser == null) {
@@ -212,10 +215,39 @@ public class UserManager {
 		if (!userExists(receiver)) {
 			return false;
 		}
-		CommonMessage msg = new CommonMessage();
-		return DataManager.getInstance().newMessage(0, msg);
+		CommonMessage msg = new CommonMessage(DataManager.getInstance().DB_getMsgCount() + 1, 
+				UserManager.getInstance().getLoginUserByHashcode(userHash).getUsername(), 
+				receiver, content);
+		return DataManager.getInstance().DB_newMessage(((int)receiver.toCharArray()[1] + (int)receiver.toCharArray()[0]) % 17 + 17, msg);
+		//return DataManager.getInstance().newMessage(0, msg);
 	}
 	
+	public Vector<CommonMessage> getMessages (long userHash, int filter) 
+			throws ClassNotFoundException, SQLException {
+		CommonUser currentUser = loginUsers.get(userHash);
+		if (currentUser == null) {
+			
+		}
+		return DataManager.getInstance().DB_getAllMessage(currentUser.getUsername());
+	}
+	
+	public void addTaskOfUser(long userHash, long tasknum) 
+			throws SQLException, ClassNotFoundException {
+		CommonUser currentUser = getLoginUserByHashcode(userHash);
+		currentUser.getUserTask().add(tasknum);
+		currentUser.setNumOfTasks(currentUser.getNumOfTasks() + 1);
+		DataManager.getInstance().DB_updateUser(currentUser.getUsername(), currentUser);
+		
+	}
+	public void removeTaskOfUser(long userHash, long tasknum) 
+			throws SQLException, ClassNotFoundException {
+		CommonUser currentUser = getLoginUserByHashcode(userHash);
+		currentUser.getUserTask().remove(tasknum);
+		System.out.println("*********" + currentUser.getUserTask().size());
+		currentUser.setNumOfTasks(currentUser.getNumOfTasks() - 1);
+		DataManager.getInstance().DB_updateUser(currentUser.getUsername(), currentUser);
+		
+	}
 	public boolean userExists (String username) {
 		if (!GlobalFunctions.isLegalUsername(username)) {
 			return false;
